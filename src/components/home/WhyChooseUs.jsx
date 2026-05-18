@@ -132,7 +132,7 @@ export default function WhyChooseUs() {
           </motion.div>
 
           {/* Additional Video Features */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: 'Emergency Department',

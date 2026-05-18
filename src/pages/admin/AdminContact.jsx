@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Save, Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { contactService } from '@/firebase/services'
+import { contactService, setContact } from '@/firebase/services'
 
 const CONTACT_DOC_ID = 'main'
 
@@ -11,22 +11,29 @@ export default function AdminContact() {
   const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm()
 
   useEffect(() => {
+    // Using contactService.getById to fetch single doc
     contactService.getById(CONTACT_DOC_ID).then(data => {
       if (data) reset(data)
       setLoading(false)
-    }).catch(() => setLoading(false))
+    }).catch((err) => {
+      console.error('Contact fetch error', err)
+      setLoading(false)
+    })
   }, [reset])
 
   const onSubmit = async (data) => {
     try {
-      const existing = await contactService.getById(CONTACT_DOC_ID)
-      if (existing) {
-        await contactService.update(CONTACT_DOC_ID, data)
-      } else {
-        await contactService.add(data)
+      // Basic validation
+      if (data.phone && !/^\+?[0-9\- ]{7,20}$/.test(data.phone)) {
+        toast.error('Enter a valid phone number')
+        return
       }
+
+      // Use setContact to ensure single doc id
+      await setContact(CONTACT_DOC_ID, data)
       toast.success('Contact details updated!')
-    } catch {
+    } catch (err) {
+      console.error(err)
       toast.error('Update failed. Please try again.')
     }
   }

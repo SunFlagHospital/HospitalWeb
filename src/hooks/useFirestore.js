@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
-import { doctorsService, servicesService, specialitiesService, careersService, testimonialsService, bannersService, contactService } from '@/firebase/services'
-import { orderBy, where, limit } from '@/firebase/services'
+import {
+  doctorsService, servicesService, specialitiesService, careersService,
+  testimonialsService, bannersService, contactService, galleryService, applicationsService, videosService,
+  orderBy as _orderBy, where as _where, limit as _limit
+} from '@/firebase/services'
+
+const orderBy = _orderBy
+const where = _where
+const limit = _limit
 
 // Enhanced generic real-time hook with full error handling
 export function useRealtimeCollection(service, constraints = []) {
@@ -54,6 +61,7 @@ export const useBanners = (page) => {
 }
 
 export const useContact = () => useRealtimeCollection(contactService)
+export const useGallery = () => useRealtimeCollection(galleryService, [orderBy('createdAt', 'desc')])
 
 // Admin real-time hooks (no filters - show all)
 export const useAdminDoctors = () => useRealtimeCollection(doctorsService)
@@ -62,3 +70,6 @@ export const useAdminCareers = () => useRealtimeCollection(careersService)
 export const useAdminTestimonials = () => useRealtimeCollection(testimonialsService)
 export const useAdminSpecialities = () => useRealtimeCollection(specialitiesService)
 export const useAdminBanners = () => useRealtimeCollection(bannersService)
+export const useAdminGallery = () => useRealtimeCollection(galleryService)
+export const useAdminApplications = () => useRealtimeCollection(applicationsService)
+export const useAdminVideos = () => useRealtimeCollection(videosService)

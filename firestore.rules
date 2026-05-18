@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && exists(/databases/{database}/documents/admins/{request.auth.uid});
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+
+    function isValidPhone(phone) {
+      return phone is string && phone.matches('^\\d{10}$');
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    match /doctors/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /services/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /specialities/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /testimonials/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /banners/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /gallery/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /videos/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /careers/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /contactInfo/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /jobApplications/{document=**} {
+      allow create: if hasRequiredFields(['fullName', 'email', 'phone', 'position']) &&
+                       isValidEmail(request.resource.data.email) &&
+                       isValidPhone(request.resource.data.phone) &&
+                       request.resource.data.fullName is string &&
+                       request.resource.data.fullName.size() > 0 &&
+                       request.resource.data.position is string &&
+                       request.resource.data.position.size() > 0;
+      allow read, delete: if isAdmin();
+      allow update: if false;
+      allow list: if false;
+    }
+
+    match /appointments/{document=**} {
+      allow create: if hasRequiredFields(['name', 'email', 'phone', 'preferredDate']) &&
+                       isValidEmail(request.resource.data.email) &&
+                       isValidPhone(request.resource.data.phone) &&
+                       request.resource.data.name is string &&
+                       request.resource.data.name.size() > 0 &&
+                       request.resource.data.preferredDate is timestamp;
+      allow read, delete: if isAdmin();
+      allow update: if false;
+      allow list: if false;
+    }
+
+    match /admins/{uid} {
+      allow read, write: if request.auth.uid == uid && isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import {
-  collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc,
+  collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, setDoc,
   query, where, orderBy, limit, serverTimestamp, onSnapshot
 } from 'firebase/firestore'
 import { db } from './config'
@@ -44,9 +44,20 @@ export const specialitiesService = createService('specialities')
 export const careersService = createService('careers')
 export const testimonialsService = createService('testimonials')
 export const bannersService = createService('banners')
-export const contactService = createService('contact')
+// Single document contact info collection
+export const contactService = createService('contactInfo')
 export const appointmentsService = createService('appointments')
-export const applicationsService = createService('careers_applications')
+// Applications collection for career/job applications
+export const applicationsService = createService('jobApplications')
+// Gallery collection
+export const galleryService = createService('gallery')
+// Videos collection
+export const videosService = createService('videos')
+
+// Small helper to set a single contact document with a fixed ID
+export const setContact = async (id, data) => {
+  await setDoc(doc(db, 'contactInfo', id), { ...data, updatedAt: serverTimestamp(), createdAt: serverTimestamp() })
+}
 
 // Named exports for convenience
 export const fetchDoctors = (constraints) => doctorsService.getAll(constraints)
@@ -78,5 +89,10 @@ export const fetchBanners = (page) => bannersService.getAll(page ? [where('page'
 export const addBanner = (data) => bannersService.add(data)
 export const updateBanner = (id, data) => bannersService.update(id, data)
 export const deleteBanner = (id) => bannersService.delete(id)
+
+export const fetchVideos = (constraints) => videosService.getAll(constraints)
+export const addVideo = (data) => videosService.add(data)
+export const updateVideo = (id, data) => videosService.update(id, data)
+export const deleteVideo = (id) => videosService.delete(id)
 
 export { orderBy, where, limit }

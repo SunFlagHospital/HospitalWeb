@@ -4,13 +4,7 @@ import { Play, X } from 'lucide-react'
 
 /**
  * Responsive Video Section Component
- * Supports:
- * - YouTube embeds
- * - Local MP4/WebM videos
- * - Lazy loading
- * - Modal playback option
- * - Mobile-friendly
- * - Error handling with fallback
+ * - Ensures w-full wrapper so grid children stack properly on small screens
  */
 export default function VideoSection({
   title,
@@ -56,19 +50,13 @@ export default function VideoSection({
     }
   }, [])
 
-  /**
-   * Extract YouTube video ID from various URL formats
-   * @param {string} url - YouTube URL
-   * @returns {string} Video ID
-   */
   const getYouTubeVideoId = (url) => {
     if (!url) return null
-    // Handle various YouTube URL formats
     const patterns = [
       /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
       /youtu\.be\/([a-zA-Z0-9_-]+)/,
       /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/,
-      /^([a-zA-Z0-9_-]+)$/, // Direct video ID
+      /^([a-zA-Z0-9_-]+)$/,
     ]
 
     for (const pattern of patterns) {
@@ -78,9 +66,6 @@ export default function VideoSection({
     return null
   }
 
-  /**
-   * Get YouTube embed URL
-   */
   const getYouTubeEmbedUrl = () => {
     const videoId = getYouTubeVideoId(videoUrl)
     if (!videoId) return null
@@ -113,10 +98,8 @@ export default function VideoSection({
     return (
       <div
         ref={videoRef}
-        className={`bg-slate-200 animate-pulse rounded-2xl overflow-hidden ${className}`}
-        style={{
-          aspectRatio,
-        }}
+        className={`w-full bg-slate-200 animate-pulse rounded-2xl overflow-hidden ${className}`}
+        style={{ aspectRatio }}
       />
     )
   }
@@ -125,7 +108,7 @@ export default function VideoSection({
   if (hasError) {
     return (
       <div
-        className={`bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center ${className}`}
+        className={`w-full bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center ${className}`}
         style={{ aspectRatio }}
       >
         <div className="text-center px-6">
@@ -151,10 +134,8 @@ export default function VideoSection({
 
     if (!embedUrl) {
       return (
-        <div className={`bg-slate-100 rounded-2xl overflow-hidden ${className}`} style={{ aspectRatio }}>
-          <div className="h-full flex items-center justify-center text-slate-600">
-            Invalid YouTube URL
-          </div>
+        <div className={`w-full bg-slate-100 rounded-2xl overflow-hidden ${className}`} style={{ aspectRatio }}>
+          <div className="h-full flex items-center justify-center text-slate-600">Invalid YouTube URL</div>
         </div>
       )
     }
@@ -171,26 +152,18 @@ export default function VideoSection({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            {/* Thumbnail */}
             {thumbnailUrl && (
-              <img
-                src={thumbnailUrl}
-                alt="Video thumbnail"
-                className="w-full h-full object-cover"
-              />
+              <img src={thumbnailUrl} alt="Video thumbnail" className="w-full h-full object-cover" />
             )}
 
-            {/* Overlay */}
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-300" />
 
-            {/* Play Button */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center group-hover:bg-primary-700 transition-all duration-300 shadow-lg group-hover:scale-110">
                 <Play className="w-7 h-7 text-white fill-white ml-1" />
               </div>
             </div>
 
-            {/* Loading Spinner */}
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                 <div className="w-8 h-8 border-3 border-white/30 border-t-white rounded-full animate-spin" />
@@ -200,27 +173,12 @@ export default function VideoSection({
 
           {/* Modal */}
           {showVideoModal && (
-            <div
-              className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-              onClick={() => setShowVideoModal(false)}
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="w-full max-w-4xl relative"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Close Button */}
-                <button
-                  onClick={() => setShowVideoModal(false)}
-                  className="absolute -top-10 right-0 text-white hover:text-primary-300 transition-colors"
-                  aria-label="Close video"
-                >
+            <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setShowVideoModal(false)}>
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="w-full max-w-4xl relative" onClick={(e) => e.stopPropagation()}>
+                <button onClick={() => setShowVideoModal(false)} className="absolute -top-10 right-0 text-white hover:text-primary-300 transition-colors" aria-label="Close video">
                   <X className="w-8 h-8" />
                 </button>
 
-                {/* iframe */}
                 <div style={{ aspectRatio: '16/9' }} className="rounded-xl overflow-hidden shadow-2xl">
                   <iframe
                     src={embedUrl}
@@ -242,7 +200,7 @@ export default function VideoSection({
 
     // Full width iframe
     return (
-      <div ref={videoRef} className={`rounded-2xl overflow-hidden shadow-premium ${className}`} style={{ aspectRatio }}>
+      <div ref={videoRef} className={`w-full rounded-2xl overflow-hidden shadow-premium ${className}`} style={{ aspectRatio }}>
         <iframe
           src={embedUrl}
           title="Video player"
@@ -260,20 +218,8 @@ export default function VideoSection({
 
   // Local Video
   return (
-    <div
-      ref={videoRef}
-      className={`rounded-2xl overflow-hidden shadow-premium bg-black ${className}`}
-      style={{ aspectRatio }}
-    >
-      <video
-        className="w-full h-full"
-        autoPlay={autoplay}
-        muted={muted}
-        controls={controls}
-        onLoadedData={handleVideoLoad}
-        onError={handleVideoError}
-        poster={thumbnailUrl}
-      >
+    <div ref={videoRef} className={`w-full rounded-2xl overflow-hidden shadow-premium bg-black ${className}`} style={{ aspectRatio }}>
+      <video className="w-full h-full" autoPlay={autoplay} muted={muted} controls={controls} onLoadedData={handleVideoLoad} onError={handleVideoError} poster={thumbnailUrl}>
         <source src={videoUrl} type="video/mp4" />
         <p className="text-white p-4">Your browser does not support HTML5 video.</p>
       </video>

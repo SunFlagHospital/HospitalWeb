@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Users, Briefcase, Award, FileText, Star, Image, Phone, TrendingUp, ArrowRight, Activity } from 'lucide-react'
-import { doctorsService, servicesService, careersService, testimonialsService } from '@/firebase/services'
+import { doctorsService, servicesService, careersService, testimonialsService, galleryService } from '@/firebase/services'
 
 const statCards = [
   { label: 'Total Doctors', icon: Users, color: 'text-primary-600', bg: 'bg-primary-50', path: '/admin/doctors', service: doctorsService },
   { label: 'Services', icon: Briefcase, color: 'text-accent', bg: 'bg-sky-50', path: '/admin/services', service: servicesService },
   { label: 'Job Openings', icon: FileText, color: 'text-amber-600', bg: 'bg-amber-50', path: '/admin/careers', service: careersService },
-  { label: 'Testimonials', icon: Star, color: 'text-medical-green', bg: 'bg-emerald-50', path: '/admin/testimonials', service: testimonialsService },
+  { label: 'Gallery Items', icon: Image, color: 'text-purple-600', bg: 'bg-purple-50', path: '/admin/gallery', service: galleryService },
 ]
 
 const quickLinks = [
@@ -15,7 +15,7 @@ const quickLinks = [
   { label: 'Manage Services', path: '/admin/services', icon: Briefcase, desc: 'Update hospital services and offerings' },
   { label: 'Manage Specialities', path: '/admin/specialities', icon: Award, desc: 'Edit speciality categories and info' },
   { label: 'Manage Careers', path: '/admin/careers', icon: FileText, desc: 'Post and manage job openings' },
-  { label: 'Manage Testimonials', path: '/admin/testimonials', icon: Star, desc: 'Approve and manage patient reviews' },
+  { label: 'Manage Gallery', path: '/admin/gallery', icon: Image, desc: 'Upload and manage gallery images' },
   { label: 'Manage Banners', path: '/admin/banners', icon: Image, desc: 'Update hero and page banner images' },
   { label: 'Contact Details', path: '/admin/contact', icon: Phone, desc: 'Update hospital contact information' },
 ]

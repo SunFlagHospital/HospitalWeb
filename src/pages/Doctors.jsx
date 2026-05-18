@@ -37,8 +37,8 @@ export default function Doctors() {
         pageSlug="doctors"
       />
 
-      <section className="py-20 bg-gradient-soft">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-20 bg-gradient-soft">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           <SectionHeader
             badge="Our Team"
             title="Meet Our Specialists"
@@ -46,23 +46,23 @@ export default function Doctors() {
           />
 
           {/* Filters */}
-          <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="relative flex-1 max-w-md w-full sm:w-auto">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search doctors by name, department..."
+                placeholder="Search doctors..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="input-field pl-11"
+                className="input-field pl-10 text-sm w-full"
               />
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 overflow-x-auto pb-2">
               {departments.map(d => (
                 <button
                   key={d}
                   onClick={() => setDept(d)}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
                     dept === d
                       ? 'bg-primary-600 text-white shadow-premium'
                       : 'bg-white text-slate-600 hover:bg-primary-50 hover:text-primary-600 border border-slate-200'
@@ -76,7 +76,7 @@ export default function Doctors() {
 
           {/* Loading State */}
           {loading && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="animate-pulse card h-80 bg-slate-100" />
               ))}
@@ -85,26 +85,26 @@ export default function Doctors() {
 
           {/* Error State */}
           {error && (
-            <div className="mt-8 bg-red-50 border border-red-200 rounded-2xl p-6 flex gap-4">
-              <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="mt-8 bg-red-50 border border-red-200 rounded-lg sm:rounded-2xl p-4 sm:p-6 flex gap-3 sm:gap-4">
+              <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 flex-shrink-0 mt-0 sm:mt-0.5" />
               <div>
-                <h3 className="font-bold text-red-900">Error Loading Doctors</h3>
-                <p className="text-red-700 text-sm">{error}</p>
+                <h3 className="font-bold text-red-900 text-sm sm:text-base">Error Loading Doctors</h3>
+                <p className="text-red-700 text-xs sm:text-sm mt-1">{error}</p>
               </div>
             </div>
           )}
 
           {/* Empty State */}
           {!loading && !error && filtered.length === 0 && (
-            <div className="col-span-3 text-center py-16 text-slate-400 mt-8">
-              <p className="text-lg font-semibold">No doctors found</p>
-              <p className="text-sm mt-1">Try adjusting your search or filter</p>
+            <div className="text-center py-12 sm:py-16 text-slate-400 mt-8">
+              <p className="text-base sm:text-lg font-semibold">No doctors found</p>
+              <p className="text-xs sm:text-sm mt-1">Try adjusting your search or filter</p>
             </div>
           )}
 
           {/* Grid */}
           {!loading && !error && filtered.length > 0 && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
               {filtered.map((doc, i) => (
                 <motion.div
                   key={doc.id}
