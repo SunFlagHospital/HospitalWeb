@@ -5,6 +5,27 @@ import { useDoctors, useTestimonials } from '@/hooks/useFirestore'
 import DoctorCard from '@/components/ui/DoctorCard'
 import SectionHeader from '@/components/ui/SectionHeader'
 
+// Skeleton loader for doctor cards
+function SkeletonDoctorCard() {
+  return (
+    <div className="card h-full flex flex-col overflow-hidden animate-pulse">
+      <div className="h-60 sm:h-72 lg:h-80 w-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200" />
+      <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col">
+        <div className="mb-3 sm:mb-4 space-y-2">
+          <div className="h-5 sm:h-6 bg-slate-200 rounded-lg w-3/4" />
+          <div className="h-4 sm:h-5 bg-slate-200 rounded-lg w-1/2" />
+        </div>
+        <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 flex-grow">
+          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-full" />
+          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-5/6" />
+          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-2/3" />
+        </div>
+        <div className="h-10 sm:h-11 bg-slate-200 rounded-xl w-full mt-auto" />
+      </div>
+    </div>
+  )
+}
+
 export function DoctorsPreview() {
   const { data: doctors, loading } = useDoctors()
 
@@ -21,7 +42,7 @@ export function DoctorsPreview() {
           <>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="animate-pulse card h-80 bg-slate-100" />
+                <SkeletonDoctorCard key={i} />
               ))}
             </div>
           </>

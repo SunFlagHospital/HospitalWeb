@@ -9,6 +9,7 @@ import { getOptimizedImageUrl, getDefaultImage, generateResponsiveImage } from '
  * - Responsive sizing
  * - Error handling with fallback image
  * - Async image decoding for performance
+ * - object-fit and object-position support
  */
 export default function ResponsiveImage({
   src,
@@ -18,8 +19,10 @@ export default function ResponsiveImage({
   height,
   className = '',
   objectFit = 'cover',
+  objectPosition = 'center',
   quality = 85,
   onError,
+  onLoad,
   placeholder = true,
   priority = false,
 }) {
@@ -57,6 +60,9 @@ export default function ResponsiveImage({
   // Handle image load
   const handleLoad = () => {
     setIsLoaded(true)
+    if (onLoad) {
+      onLoad()
+    }
   }
 
   // Handle image error with fallback
@@ -117,6 +123,7 @@ export default function ResponsiveImage({
         className={`w-full h-full ${className}`}
         style={{
           objectFit,
+          objectPosition,
           opacity: isLoaded ? 1 : 0,
           transition: 'opacity 0.3s ease-in-out',
         }}
@@ -135,3 +142,4 @@ export default function ResponsiveImage({
     </div>
   )
 }
+

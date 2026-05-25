@@ -13,6 +13,11 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
+
+  /* WebP image support */
+  img {
+    content-visibility: auto;
+  }
 }
 
 @layer components {
@@ -25,9 +30,20 @@
   .btn-accent {
     @apply inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5;
   }
+  
+  /* Premium card styling */
   .card {
     @apply bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden;
   }
+
+  .card img {
+    @apply transition-transform duration-300;
+  }
+
+  .card:hover img {
+    @apply scale-105;
+  }
+
   .section-title {
     @apply text-3xl md:text-4xl font-bold text-primary-900 font-display;
   }
@@ -61,6 +77,28 @@
   .text-shadow {
     text-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
+
+  /* Premium image container for doctor cards */
+  .doctor-image-container {
+    @apply relative overflow-hidden bg-gradient-soft;
+    aspect-ratio: auto;
+  }
+
+  .doctor-image-container img {
+    @apply w-full h-full;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  /* Smooth loading transition */
+  .image-loading {
+    @apply animate-pulse;
+  }
+
+  /* Premium hover effect for cards */
+  .card-premium {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-card-hover;
+  }
 }
 
 /* Swiper custom styles */
@@ -86,4 +124,39 @@ html, body, #root {
 /* Loading skeleton */
 .skeleton {
   @apply animate-pulse bg-slate-200 rounded-lg;
+}
+
+/* WebP image optimization - use smaller file sizes */
+@supports (content: url(#webp)) {
+  .webp-optimize {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* High DPI screens optimization */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Ensure images don't cause layout shift during loading */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Smooth transitions for image opacity */
+.image-fade-in {
+  animation: fadeInImage 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeInImage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

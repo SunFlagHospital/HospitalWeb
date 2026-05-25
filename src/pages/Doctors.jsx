@@ -9,6 +9,32 @@ import { useAllDoctors } from '@/hooks/useFirestore'
 
 const departments = ['All', 'Cardiology', 'Neurology', 'Orthopedics', 'Gynecology', 'Oncology', 'Pediatrics', 'Emergency', 'Gastroenterology']
 
+// Loading skeleton card component for premium look
+function SkeletonDoctorCard() {
+  return (
+    <div className="card h-full flex flex-col overflow-hidden animate-pulse">
+      {/* Image skeleton */}
+      <div className="h-60 sm:h-72 lg:h-80 w-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200" />
+
+      {/* Content skeleton */}
+      <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col">
+        <div className="mb-3 sm:mb-4 space-y-2">
+          <div className="h-5 sm:h-6 bg-slate-200 rounded-lg w-3/4" />
+          <div className="h-4 sm:h-5 bg-slate-200 rounded-lg w-1/2" />
+        </div>
+
+        <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 flex-grow">
+          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-full" />
+          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-5/6" />
+          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-2/3" />
+        </div>
+
+        <div className="h-10 sm:h-11 bg-slate-200 rounded-xl w-full mt-auto" />
+      </div>
+    </div>
+  )
+}
+
 export default function Doctors() {
   const [search, setSearch] = useState('')
   const [dept, setDept] = useState('All')
@@ -74,35 +100,43 @@ export default function Doctors() {
             </div>
           </div>
 
-          {/* Loading State */}
+          {/* Loading State - Improved skeleton with proper card heights */}
           {loading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="animate-pulse card h-80 bg-slate-100" />
+                <SkeletonDoctorCard key={i} />
               ))}
             </div>
           )}
 
           {/* Error State */}
           {error && (
-            <div className="mt-8 bg-red-50 border border-red-200 rounded-lg sm:rounded-2xl p-4 sm:p-6 flex gap-3 sm:gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-8 bg-red-50 border border-red-200 rounded-lg sm:rounded-2xl p-4 sm:p-6 flex gap-3 sm:gap-4"
+            >
               <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-600 flex-shrink-0 mt-0 sm:mt-0.5" />
               <div>
                 <h3 className="font-bold text-red-900 text-sm sm:text-base">Error Loading Doctors</h3>
                 <p className="text-red-700 text-xs sm:text-sm mt-1">{error}</p>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Empty State */}
           {!loading && !error && filtered.length === 0 && (
-            <div className="text-center py-12 sm:py-16 text-slate-400 mt-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12 sm:py-16 text-slate-400 mt-8"
+            >
               <p className="text-base sm:text-lg font-semibold">No doctors found</p>
               <p className="text-xs sm:text-sm mt-1">Try adjusting your search or filter</p>
-            </div>
+            </motion.div>
           )}
 
-          {/* Grid */}
+          {/* Grid - with auto-height cards for equal spacing */}
           {!loading && !error && filtered.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
               {filtered.map((doc, i) => (
