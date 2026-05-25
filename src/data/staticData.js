@@ -2,31 +2,30 @@ export const HOSPITAL_INFO = {
   name: 'Sunflag Global Hospital',
   city: 'Rohtak',
   tagline: 'Advanced Healthcare with a Human Touch',
-  phone: '+91-1262-255555',
-  emergency: '+91-1262-100',
-  whatsapp: '+919812345678',
-  email: 'info@sunflaghospital.com',
-  address: 'Delhi Bypass Road, Rohtak, Haryana - 124001',
-  mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3499.1234567890!2d76.5!3d28.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDU0JzAwLjAiTiA3NsKwMzAnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890',
+  phone: '+91-9254308880',
+  emergency: '+91-9254308880',
+  whatsapp: '+919254308880',
+  email: 'info@sunflagglobalhospital.com',
+  address: 'Near Sheela Bypass ,Sonipat Road, Rohtak, Haryana - 124001',
+  mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.0895509943152!2d76.60642367521186!3d28.895686872082624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d851a82659c73%3A0x9a3509f5c6a4eb1e!2sSunflag%20Global%20Hospital%20Rohtak!5e0!3m2!1sen!2sin!4v1779749742630!5m2!1sen!2sin',
   hours: {
     opd: 'Mon–Sat: 8:00 AM – 8:00 PM',
     emergency: '24/7 Emergency Services',
     icu: '24/7 Intensive Care Unit',
   },
   social: {
-    facebook: 'https://facebook.com/sunflaghospital',
-    instagram: 'https://instagram.com/sunflaghospital',
-    twitter: 'https://twitter.com/sunflaghospital',
-    youtube: 'https://youtube.com/sunflaghospital',
+    facebook: 'https://facebook.com/sghrohtak',
+    instagram: 'https://instagram.com/sunflag_global_hospital',
+    youtube: 'https://youtube.com/@sunflagglobalhospitalrohtak',
   },
-  established: 2002,
+  established: 2016,
 }
 
 export const STATS = [
-  { value: '25,000+', label: 'Patients Treated Annually', icon: 'Users' },
-  { value: '200+', label: 'Medical Experts', icon: 'Stethoscope' },
+  { value: '20,000+', label: 'Patients Treated Annually', icon: 'Users' },
+  { value: '20+', label: 'Medical Experts', icon: 'Stethoscope' },
   { value: '50+', label: 'Specialities & Services', icon: 'Award' },
-  { value: '22+', label: 'Years of Excellence', icon: 'Calendar' },
+  { value: '10+', label: 'Years of Excellence', icon: 'Calendar' },
 ]
 
 export const MOCK_DOCTORS = [

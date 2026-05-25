@@ -2,10 +2,10 @@ import { motion } from 'framer-motion'
 import { Users, Stethoscope, Award, Calendar } from 'lucide-react'
 
 const stats = [
-  { value: '25,000+', label: 'Patients Treated Annually', icon: 'Users' },
-  { value: '200+', label: 'Medical Experts', icon: 'Stethoscope' },
+  { value: '20,000+', label: 'Patients Treated Annually', icon: 'Users' },
+  { value: '20+', label: 'Medical Experts', icon: 'Stethoscope' },
   { value: '50+', label: 'Specialities & Services', icon: 'Award' },
-  { value: '22+', label: 'Years of Excellence', icon: 'Calendar' },
+  { value: '10+', label: 'Years of Excellence', icon: 'Calendar' },
 ]
 
 const iconMap = { Users, Stethoscope, Award, Calendar }

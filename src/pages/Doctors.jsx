@@ -57,7 +57,7 @@ export default function Doctors() {
       />
       <PageBanner
         title="Our Expert Doctors"
-        subtitle="200+ board-certified specialists committed to your health and wellbeing"
+        subtitle="20+ board-certified specialists committed to your health and wellbeing"
         breadcrumb={[{ label: 'Doctors' }]}
         imageUrl="https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=1600&q=80"
         pageSlug="doctors"

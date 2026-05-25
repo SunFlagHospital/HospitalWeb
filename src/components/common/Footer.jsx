@@ -126,7 +126,6 @@ export default function Footer() {
               {[
                 { href: HOSPITAL_INFO.social.facebook, Icon: Facebook },
                 { href: HOSPITAL_INFO.social.instagram, Icon: Instagram },
-                { href: HOSPITAL_INFO.social.twitter, Icon: Twitter },
                 { href: HOSPITAL_INFO.social.youtube, Icon: Youtube },
               ].map(({ href, Icon }) => (
                 <a
@@ -148,11 +147,11 @@ export default function Footer() {
       <div className="border-t border-primary-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-primary-300 flex items-center gap-1.5">
-            © {new Date().getFullYear()} Sunflag Global Hospital Rohtak. Made with <Heart className="w-3.5 h-3.5 text-medical-red" /> in India.
+            © {new Date().getFullYear()} Sunflag Global Hospital Rohtak. Made with <Heart className="w-3.5 h-3.5 text-medical-red" /> by <a href='https://www.vercittycreations.xyz'>Vercitty Creations</a>.
           </p>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-primary-400">Privacy Policy</span>
-            <span className="text-sm text-primary-400">Terms of Service</span>
+            {/* <span className="text-sm text-primary-400">Privacy Policy</span>
+            <span className="text-sm text-primary-400">Terms of Service</span> */}
             <Link
               to="/admin/login"
               className="text-xs text-primary-600 hover:text-primary-400 transition-colors"

@@ -9,12 +9,10 @@ import { Users, Stethoscope, Calendar } from 'lucide-react'
 const iconMap = { Users, Stethoscope, Award, Calendar }
 
 const milestones = [
-  { year: '2002', event: 'Hospital Founded', desc: 'Sunflag Global Hospital established with a vision to deliver world-class healthcare in Rohtak.' },
-  { year: '2008', event: 'NABH Accreditation', desc: 'Received National Accreditation Board for Hospitals certification for quality patient care.' },
-  { year: '2012', event: 'ICU & Cath Lab Expansion', desc: 'State-of-the-art cardiac catheterization lab and 40-bed ICU opened to serve critical care patients.' },
-  { year: '2016', event: 'Robotic Surgery Centre', desc: 'Launched one of Haryana\'s first robotic-assisted surgical centers for minimally invasive procedures.' },
+  { year: '2016', event: 'Hospital Founded', desc: 'Sunflag Global Hospital established with a vision to deliver world-class healthcare in Rohtak.' },
   { year: '2020', event: 'Digital Transformation', desc: 'Complete digitization of patient records, telemedicine launch, and AI-powered diagnostics.' },
-  { year: '2024', event: '25,000+ Patients/Year', desc: 'Achieved milestone of treating over 25,000 patients annually with 200+ specialist doctors.' },
+  { year: '2023', event: 'NABH Accreditation', desc: 'Received National Accreditation Board for Hospitals certification for quality patient care.' },
+  { year: '2024', event: '20,000+ Patients/Year', desc: 'Achieved milestone of treating over 20,000 patients annually with 20+ specialist doctors.' },
 ]
 
 export default function About() {
@@ -22,12 +20,12 @@ export default function About() {
     <>
       <SEO
         title="About Sunflag Global Hospital Rohtak"
-        description="Learn about Sunflag Global Hospital Rohtak — established in 2002, NABH accredited, 200+ specialists, 50+ specialities serving Rohtak and Haryana."
+        description="Learn about Sunflag Global Hospital Rohtak — established in 2016, NABH accredited, 20+ specialists, 25+ specialities serving Rohtak and Haryana."
         canonical="/about"
       />
       <PageBanner
         title="About Us"
-        subtitle="A legacy of healing, innovation, and compassionate care since 2002"
+        subtitle="A legacy of healing, innovation, and compassionate care since 2016"
         breadcrumb={[{ label: 'About Us' }]}
         imageUrl="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1600&q=80"
         pageSlug="about"
@@ -55,7 +53,7 @@ export default function About() {
                 background or condition.
               </p>
               <p className="text-slate-500 leading-relaxed mb-8">
-                With 200+ specialist doctors, cutting-edge technology, and a compassionate team of healthcare 
+                With 20+ specialist doctors, cutting-edge technology, and a compassionate team of healthcare 
                 professionals, we serve over 25,000 patients annually. Our NABH accreditation reflects our 
                 unwavering commitment to patient safety and quality care.
               </p>
@@ -90,7 +88,7 @@ export default function About() {
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-primary-600 text-white rounded-2xl p-5 shadow-premium">
-                <p className="text-4xl font-bold font-display">22+</p>
+                <p className="text-4xl font-bold font-display">10+</p>
                 <p className="text-primary-200 text-sm">Years of Excellence</p>
               </div>
             </motion.div>

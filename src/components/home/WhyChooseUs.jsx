@@ -54,7 +54,7 @@ export default function WhyChooseUs() {
 
               {/* Stats pill */}
               <div className="absolute top-6 -left-6 bg-primary-600 text-white rounded-2xl shadow-premium px-5 py-4">
-                <p className="text-3xl font-bold font-display">200+</p>
+                <p className="text-3xl font-bold font-display">20+</p>
                 <p className="text-primary-200 text-xs">Specialist Doctors</p>
               </div>
             </motion.div>
@@ -122,7 +122,7 @@ export default function WhyChooseUs() {
             <VideoSection
               title="Hospital Overview"
               description="Tour our facilities"
-              videoUrl="dQw4w9WgXcQ"
+              videoUrl="JbX8VHSDgWg"
               videoType="youtube"
               thumbnailUrl="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&h=800&fit=crop"
               controls={true}
@@ -132,7 +132,7 @@ export default function WhyChooseUs() {
           </motion.div>
 
           {/* Additional Video Features */}
-          <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8">
+          {/* <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 title: 'Emergency Department',
@@ -172,10 +172,9 @@ export default function WhyChooseUs() {
                 <p className="text-slate-600 text-sm mt-1">{item.desc}</p>
               </motion.div>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
     </>
   )
 }
-

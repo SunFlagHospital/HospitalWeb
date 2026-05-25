@@ -5,8 +5,8 @@ import { HOSPITAL_INFO } from '@/data/staticData'
 
 const trustBadges = [
   { icon: Shield, label: 'NABH Accredited', sub: 'Certified Hospital' },
-  { icon: Award, label: '22+ Years', sub: 'of Excellence' },
-  { icon: Users, label: '25,000+', sub: 'Patients/Year' },
+  { icon: Award, label: '10+ Years', sub: 'of Excellence' },
+  { icon: Users, label: '20,000+', sub: 'Patients/Year' },
   { icon: Clock, label: '24/7', sub: 'Emergency Care' },
 ]
 
@@ -38,7 +38,7 @@ export default function HeroSection() {
             className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 text-white text-xs sm:text-sm font-medium mb-4 sm:mb-6"
           >
             <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-medical-green rounded-full animate-pulse" />
-            <span className="hidden sm:inline">NABH Accredited | 200+ Specialists | Rohtak, Haryana</span>
+            <span className="hidden sm:inline">NABH Accredited | 20+ Specialists | Rohtak, Haryana</span>
             <span className="sm:hidden">NABH Accredited | Top Hospital</span>
           </motion.div>
 
@@ -61,7 +61,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-sm sm:text-lg md:text-xl text-white/85 mb-6 sm:mb-8 max-w-2xl leading-relaxed"
           >
-            Sunflag Global Hospital delivers world-class medical care with 200+ specialist doctors, state-of-the-art technology, and a commitment to your complete wellness.
+            Sunflag Global Hospital delivers world-class medical care with 20+ specialist doctors, state-of-the-art technology, and a commitment to your complete wellness.
           </motion.p>
 
           {/* CTA Buttons */}

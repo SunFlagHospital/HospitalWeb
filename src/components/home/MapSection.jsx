@@ -54,7 +54,7 @@ export default function MapSection() {
             className="lg:col-span-2 rounded-3xl overflow-hidden shadow-card-hover h-[450px] lg:h-auto border border-slate-100"
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3499.1!2d76.5!3d28.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSunflag+Global+Hospital+Rohtak!5e0!3m2!1sen!2sin!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.0895509943152!2d76.60642367521186!3d28.895686872082624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d851a82659c73%3A0x9a3509f5c6a4eb1e!2sSunflag%20Global%20Hospital%20Rohtak!5e0!3m2!1sen!2sin!4v1779749742630!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: '400px' }}
