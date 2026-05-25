@@ -7,7 +7,7 @@ const fields = [
   { name: 'name', label: 'Full Name', required: true, placeholder: 'Dr. Full Name' },
   { name: 'department', label: 'Department', required: true, type: 'select', options: [
     'Cardiology', 'Neurology', 'Orthopedics', 'Gynecology', 'Oncology',
-    'Pediatrics', 'Gastroenterology', 'Urology', 'Dermatology', 'General Medicine','Plastic Surgery'
+    'Pediatrics', 'Gastroenterology', 'Urology', 'Dermatology', 'General Medicine','Plastic Surgery','Surgery','Radiology','Anaesthesia'
   ]},
   { name: 'speciality', label: 'Speciality / Sub-specialty', required: true, placeholder: 'e.g. Interventional Cardiology' },
   { name: 'qualification', label: 'Qualifications', required: true, placeholder: 'MBBS, MD, DM (Cardiology)' },
