@@ -6,6 +6,7 @@ import AdminLayout from '@/layouts/AdminLayout'
 import AdminRoute from '@/routes/AdminRoute'
 import LoadingScreen from '@/components/ui/LoadingScreen'
 import FloatingActions from '@/components/common/FloatingActions'
+import ScrollToTop from '@/components/common/ScrollToTop'
 
 const Home = lazy(() => import('@/pages/Home'))
 const About = lazy(() => import('@/pages/About'))
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <AuthProvider>
       <Suspense fallback={<LoadingScreen />}>
+        <ScrollToTop />
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />

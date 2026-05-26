@@ -6,6 +6,11 @@ import { Toaster } from 'react-hot-toast'
 import App from './App.jsx'
 import './index.css'
 
+// Prevent browser from restoring scroll position on page reload
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual'
+}
+
 // Future flags for React Router v7 compatibility
 const routerDefaults = {
   future: {

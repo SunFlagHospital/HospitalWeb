@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px; /* Offset for fixed navbar */
   }
   body {
     font-family: 'DM Sans', sans-serif;
@@ -17,6 +18,38 @@
   /* WebP image support */
   img {
     content-visibility: auto;
+  }
+
+  /* Optimize animations and scrolling */
+  * {
+    /* GPU acceleration for smooth scrolling and animations */
+    will-change: auto;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Optimize scrolling on mobile */
+  @media (max-width: 768px) {
+    html {
+      scroll-padding-top: 70px; /* Smaller offset on mobile */
+    }
+    /* Disable expensive animations on low-end devices */
+    * {
+      animation-timing-function: linear !important;
+    }
   }
 }
 
