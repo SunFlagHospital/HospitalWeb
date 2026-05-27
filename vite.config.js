@@ -1,12 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import compression from 'vite-plugin-compression'
 
 export default defineConfig({
   plugins: [
     react({
       fastRefresh: true,
       jsxImportSource: 'react',
+    }),
+    // Enable Gzip compression for all assets
+    compression({
+      verbose: true,
+      disable: false,
+      threshold: 10240, // 10KB - compress files > 10KB
+      algorithm: 'gzip',
+      ext: '.gz',
     }),
   ],
   resolve: {
