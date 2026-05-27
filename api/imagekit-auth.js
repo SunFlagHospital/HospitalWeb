@@ -17,7 +17,7 @@ export default function handler(req, res) {
   try {
     // Get credentials from environment (Vercel secrets)
     const privateKey = process.env.IMAGEKIT_PRIVATE_KEY
-    const publicKey = process.env.VITE_IMAGEKIT_PUBLIC_KEY
+    const publicKey = process.env.IMAGEKIT_PUBLIC_KEY
 
     // Validate credentials exist
     if (!privateKey || !publicKey) {
@@ -49,10 +49,9 @@ export default function handler(req, res) {
 
     // Return authentication parameters
     return res.status(200).json({
-      token: publicKey,
+      publicKey,
       expire,
-      signature,
-      timestamp
+      signature
     })
   } catch (error) {
     console.error('❌ ImageKit auth error:', error)

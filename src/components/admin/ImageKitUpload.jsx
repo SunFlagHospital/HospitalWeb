@@ -66,15 +66,14 @@ export default function ImageKitUpload({
       formData.append('useUniqueFileName', 'true')
       
       // Add authentication parameters
-      formData.append('publicKey', authData.token)
+      formData.append('publicKey', authData.publicKey)
       formData.append('signature', authData.signature)
       formData.append('expire', authData.expire)
-      formData.append('token', authData.token)
 
       console.log('📦 Uploading file to ImageKit...', {
         fileName: file.name,
         fileSize: file.size,
-        publicKey: authData.token.substring(0, 10) + '...'
+        publicKey: authData.publicKey.substring(0, 10) + '...'
       })
 
       // Step 3: Upload to ImageKit
