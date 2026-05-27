@@ -1,5 +1,7 @@
 import { Stethoscope, Award, Calendar, CheckCircle2, XCircle } from 'lucide-react'
+import { useState } from 'react'
 import AdminCRUD from '@/components/admin/AdminCRUD'
+import ImageKitUpload from '@/components/admin/ImageKitUpload'
 import { useAdminDoctors } from '@/hooks/useFirestore'
 import { addDoctor, updateDoctor, deleteDoctor } from '@/firebase/services'
 
@@ -12,7 +14,7 @@ const fields = [
   { name: 'speciality', label: 'Speciality / Sub-specialty', required: true, placeholder: 'e.g. Interventional Cardiology' },
   { name: 'qualification', label: 'Qualifications', required: true, placeholder: 'MBBS, MD, DM (Cardiology)' },
   { name: 'experience', label: 'Experience', required: true, placeholder: 'e.g. 15 Years' },
-  { name: 'image', label: 'Photo URL', type: 'url', placeholder: 'https://...' },
+  { name: 'image', label: 'Photo URL (or upload below)', type: 'url', placeholder: 'https://...' },
   { name: 'bio', label: 'Short Bio', type: 'textarea', placeholder: 'Brief professional biography...', rows: 3 },
   { name: 'available', label: 'Available for Appointments', type: 'checkbox' },
 ]
@@ -54,6 +56,27 @@ function DoctorCard({ item: doc }) {
 
 export default function AdminDoctors() {
   const { data: doctors, loading } = useAdminDoctors()
+  const [formData, setFormData] = useState({})
+
+  const handleImageUpload = (imageUrl) => {
+    setFormData(prev => ({ ...prev, image: imageUrl }))
+  }
+
+  const handleAdd = async (newItem) => {
+    if (formData.image) {
+      newItem.image = formData.image
+      setFormData({})
+    }
+    await addDoctor(newItem)
+  }
+
+  const handleUpdate = async (id, updatedItem) => {
+    if (formData.image) {
+      updatedItem.image = formData.image
+      setFormData({})
+    }
+    await updateDoctor(id, updatedItem)
+  }
 
   return (
     <AdminCRUD
@@ -61,11 +84,26 @@ export default function AdminDoctors() {
       items={doctors}
       loading={loading}
       fields={fields}
-      onAdd={addDoctor}
-      onUpdate={updateDoctor}
+      onAdd={handleAdd}
+      onUpdate={handleUpdate}
       onDelete={deleteDoctor}
       renderCard={(item) => <DoctorCard item={item} />}
       searchKey="name"
+      renderExtraFields={() => (
+        <div className="mt-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
+            📸 Or Upload Doctor Photo with ImageKit
+          </label>
+          <ImageKitUpload
+            onUploadSuccess={handleImageUpload}
+            label="Upload Doctor Photo"
+            maxSize={5 * 1024 * 1024}
+          />
+          {formData.image && (
+            <p className="text-xs text-green-600 mt-2">✅ Image URL auto-filled in form above</p>
+          )}
+        </div>
+      )}
     />
   )
 }

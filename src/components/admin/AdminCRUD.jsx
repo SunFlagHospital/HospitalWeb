@@ -16,6 +16,7 @@ import ConfirmDialog from './ConfirmDialog'
  *  - onUpdate: async (id, data) => void
  *  - onDelete: async (id) => void
  *  - renderCard: (item) => JSX
+ *  - renderExtraFields: () => JSX (optional extra fields in modal)
  *  - searchKey: string (field to search by)
  */
 export default function AdminCRUD({
@@ -27,6 +28,7 @@ export default function AdminCRUD({
   onUpdate,
   onDelete,
   renderCard,
+  renderExtraFields,
   searchKey = 'name',
 }) {
   const [search, setSearch] = useState('')
@@ -255,6 +257,9 @@ export default function AdminCRUD({
                     </div>
                   ))}
                 </div>
+
+                {/* Extra Fields (ImageKit Upload, etc) */}
+                {renderExtraFields && renderExtraFields()}
 
                 <div className="flex gap-3 pt-2 border-t border-slate-200 mt-6">
                   <button type="button" onClick={closeModal} className="btn-secondary flex-1 justify-center">
