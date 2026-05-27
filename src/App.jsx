@@ -30,6 +30,7 @@ const AdminTestimonials = lazy(() => import('@/pages/admin/AdminTestimonials'))
 const AdminGallery = lazy(() => import('@/pages/admin/AdminGallery'))
 const AdminApplications = lazy(() => import('@/pages/admin/AdminApplications'))
 const AdminVideos = lazy(() => import('@/pages/admin/AdminVideos'))
+const AdminQueries = lazy(() => import('@/pages/admin/AdminQueries'))
 
 export default function App() {
   return (
@@ -63,6 +64,7 @@ export default function App() {
             <Route path="/admin/gallery" element={<AdminGallery />} />
             <Route path="/admin/applications" element={<AdminApplications />} />
             <Route path="/admin/videos" element={<AdminVideos />} />
+            <Route path="/admin/queries" element={<AdminQueries />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

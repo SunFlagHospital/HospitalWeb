@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, Briefcase, Award, FileText, Star, Image, Phone, TrendingUp, ArrowRight, Activity } from 'lucide-react'
+import { Users, Briefcase, Award, FileText, Star, Image, Phone, TrendingUp, ArrowRight, Activity, Mail } from 'lucide-react'
 import { doctorsService, servicesService, careersService, testimonialsService, galleryService } from '@/firebase/services'
 
 const statCards = [
@@ -11,6 +11,7 @@ const statCards = [
 ]
 
 const quickLinks = [
+  { label: 'Manage Queries', path: '/admin/queries', icon: Mail, desc: 'View and manage contact form submissions' },
   { label: 'Manage Doctors', path: '/admin/doctors', icon: Users, desc: 'Add, edit, or remove doctor profiles' },
   { label: 'Manage Services', path: '/admin/services', icon: Briefcase, desc: 'Update hospital services and offerings' },
   { label: 'Manage Specialities', path: '/admin/specialities', icon: Award, desc: 'Edit speciality categories and info' },

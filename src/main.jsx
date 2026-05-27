@@ -5,6 +5,16 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'react-hot-toast'
 import App from './App.jsx'
 import './index.css'
+import { setupResourceHints } from './utils/performance'
+
+// Setup performance optimizations
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => {
+    setupResourceHints()
+  })
+} else {
+  setTimeout(setupResourceHints, 0)
+}
 
 // Prevent browser from restoring scroll position on page reload
 if ('scrollRestoration' in window.history) {

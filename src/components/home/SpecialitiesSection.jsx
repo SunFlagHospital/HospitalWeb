@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { useSpecialities } from '@/hooks/useFirestore'
 import SectionHeader from '@/components/ui/SectionHeader'
+import { getSpecialityIcon } from '@/components/common/MedicalIcons'
 
 export default function SpecialitiesSection() {
   const { data: specialities, loading } = useSpecialities()
@@ -25,33 +26,36 @@ export default function SpecialitiesSection() {
         ) : specialities.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mt-8 sm:mt-12">
-              {specialities.map((spec, i) => (
-                <motion.div
-                  key={spec.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <Link
-                    to="/specialities"
-                    className="card p-3 sm:p-5 flex flex-col items-center text-center group hover:-translate-y-1 transition-all duration-300 h-full"
+              {specialities.map((spec, i) => {
+                const IconComponent = getSpecialityIcon(spec.name)
+                return (
+                  <motion.div
+                    key={spec.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
                   >
-                    <div
-                      className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-lg sm:text-2xl mb-2 sm:mb-4 group-hover:scale-110 transition-transform duration-300"
-                      style={{ backgroundColor: `${spec.color || '#3b82f6'}18` }}
+                    <Link
+                      to="/specialities"
+                      className="card p-3 sm:p-5 flex flex-col items-center text-center group hover:-translate-y-1 transition-all duration-300 h-full"
                     >
-                      {spec.icon || '🏥'}
-                    </div>
-                    <h3 className="font-bold text-primary-900 font-display text-xs sm:text-sm mb-1 sm:mb-2 group-hover:text-primary-600 transition-colors">
-                      {spec.name}
-                    </h3>
-                    <p className="text-slate-500 text-xs leading-tight line-clamp-2">
-                      {spec.description}
-                    </p>
-                  </Link>
-                </motion.div>
-              ))}
+                      <div
+                        className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-primary-600 mb-2 sm:mb-4 group-hover:scale-110 transition-transform duration-300"
+                        style={{ backgroundColor: `${spec.color || '#3b82f6'}18` }}
+                      >
+                        <IconComponent />
+                      </div>
+                      <h3 className="font-bold text-primary-900 font-display text-xs sm:text-sm mb-1 sm:mb-2 group-hover:text-primary-600 transition-colors">
+                        {spec.name}
+                      </h3>
+                      <p className="text-slate-500 text-xs leading-tight line-clamp-2">
+                        {spec.description}
+                      </p>
+                    </Link>
+                  </motion.div>
+                )
+              })}
             </div>
 
             <div className="text-center mt-8 sm:mt-10">

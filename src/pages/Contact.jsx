@@ -2,11 +2,12 @@ import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, User, FileText } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { db } from '@/firebase/config'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import SEO from '@/seo/SEO'
 import PageBanner from '@/components/common/PageBanner'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { HOSPITAL_INFO } from '@/data/staticData'
-import { appointmentsService } from '@/firebase/services'
 
 const departments = [
   'General Medicine', 'Cardiology', 'Neurology', 'Orthopedics',
@@ -20,45 +21,91 @@ export default function Contact() {
   const onSubmit = async (data) => {
     try {
       // Strong validation
-      const errors = []
+      const validationErrors = []
       
-      if (!data.name?.trim()) errors.push('Full name is required')
-      if (!data.phone?.trim()) errors.push('Phone number is required')
-      if (!data.department) errors.push('Please select a department')
+      if (!data.name?.trim()) validationErrors.push('Full name is required')
+      if (!data.phone?.trim()) validationErrors.push('Phone number is required')
+      if (!data.department) validationErrors.push('Please select a department')
       
       const phoneClean = data.phone?.replace(/\D/g, '') || ''
       if (phoneClean && !/^[6-9]\d{9}$/.test(phoneClean)) {
-        errors.push('Enter a valid 10-digit Indian mobile number')
+        validationErrors.push('Enter a valid 10-digit Indian mobile number')
       }
       
       if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-        errors.push('Enter a valid email address')
+        validationErrors.push('Enter a valid email address')
       }
 
-      if (errors.length > 0) {
-        toast.error(errors[0])
+      if (validationErrors.length > 0) {
+        toast.error(validationErrors[0])
         return
       }
 
-      // Create appointment record
-      const appointmentData = {
+      // Save to Firestore - both queries and appointments collections
+      const queryData = {
         name: data.name.trim(),
         phone: phoneClean,
         email: data.email?.trim() || '',
-        department: data.department,
+        selectedDoctor: data.department,
         date: data.date || '',
         age: data.age ? parseInt(data.age) : null,
         message: data.message?.trim() || '',
-        status: 'pending',
-        createdAt: new Date()
+        createdAt: serverTimestamp(),
+        status: 'pending'
       }
 
-      await appointmentsService.add(appointmentData)
-      toast.success('Appointment request sent successfully! We\'ll confirm within 2 hours.')
+      // Save to queries collection
+      const queriesRef = await addDoc(collection(db, 'queries'), queryData)
+      console.log('Query saved:', queriesRef.id)
+
+      // Also save to appointments for backward compatibility
+      const appointmentsRef = await addDoc(collection(db, 'appointments'), {
+        ...queryData,
+        department: data.department
+      })
+      console.log('Appointment saved:', appointmentsRef.id)
+
+      // Show success toast first
+      toast.success('✅ Appointment request submitted successfully! Opening WhatsApp...')
+      
+      // Reset form immediately
       reset()
+
+      // Generate WhatsApp message
+      const whatsappMessage = `New Appointment Query
+
+Name: ${data.name}
+Phone: ${phoneClean}
+Email: ${data.email || 'Not provided'}
+Department: ${data.department}
+Message: ${data.message || 'No additional message'}
+
+---`
+      
+      const whatsappPhone = HOSPITAL_INFO.whatsapp?.replace(/\D/g, '')
+      if (!whatsappPhone) {
+        console.warn('WhatsApp number not configured')
+        toast.error('WhatsApp number not configured. Please call us directly.')
+        return
+      }
+
+      const whatsappLink = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappMessage)}`
+      
+      // Open WhatsApp after a brief delay for better UX
+      setTimeout(() => {
+        window.open(whatsappLink, '_blank', 'width=800,height=600')
+      }, 800)
     } catch (err) {
       console.error('Appointment submission error:', err)
-      toast.error(err.message || 'Something went wrong. Please call us directly or try again.')
+      
+      // Check if it's a permission error
+      if (err.code === 'permission-denied') {
+        toast.error('Permission denied. Please check Firestore security rules.')
+      } else if (err.code === 'failed-precondition') {
+        toast.error('Database error. Please try again.')
+      } else {
+        toast.error(err.message || 'Something went wrong. Please call us directly or try again.')
+      }
     }
   }
 

@@ -75,16 +75,28 @@ service cloud.firestore {
       allow list: if false;
     }
 
-    match /appointments/{document=**} {
-      allow create: if hasRequiredFields(['name', 'email', 'phone', 'preferredDate']) &&
-                       isValidEmail(request.resource.data.email) &&
-                       isValidPhone(request.resource.data.phone) &&
+    match /queries/{document=**} {
+      allow create: if hasRequiredFields(['name', 'phone', 'selectedDoctor']) &&
                        request.resource.data.name is string &&
                        request.resource.data.name.size() > 0 &&
-                       request.resource.data.preferredDate is timestamp;
-      allow read, delete: if isAdmin();
-      allow update: if false;
-      allow list: if false;
+                       request.resource.data.phone is string &&
+                       request.resource.data.phone.size() > 0 &&
+                       request.resource.data.selectedDoctor is string &&
+                       request.resource.data.selectedDoctor.size() > 0;
+      allow read, delete, update: if isAdmin();
+      allow list: if isAdmin();
+    }
+
+    match /appointments/{document=**} {
+      allow create: if hasRequiredFields(['name', 'phone', 'selectedDoctor']) &&
+                       request.resource.data.name is string &&
+                       request.resource.data.name.size() > 0 &&
+                       request.resource.data.phone is string &&
+                       request.resource.data.phone.size() > 0 &&
+                       request.resource.data.selectedDoctor is string &&
+                       request.resource.data.selectedDoctor.size() > 0;
+      allow read, delete, update: if isAdmin();
+      allow list: if isAdmin();
     }
 
     match /admins/{uid} {
@@ -96,3 +108,4 @@ service cloud.firestore {
     }
   }
 }
+

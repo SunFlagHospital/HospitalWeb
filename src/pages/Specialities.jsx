@@ -5,6 +5,7 @@ import SEO from '@/seo/SEO'
 import PageBanner from '@/components/common/PageBanner'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { useSpecialities } from '@/hooks/useFirestore'
+import { getSpecialityIcon } from '@/components/common/MedicalIcons'
 
 export default function Specialities() {
   const { data: specialities, loading, error } = useSpecialities()
@@ -63,36 +64,39 @@ export default function Specialities() {
           {/* Grid */}
           {!loading && !error && specialities.length > 0 && (
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
-              {specialities.map((spec, i) => (
-                <motion.div
-                  key={spec.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <div className="card p-6 group hover:-translate-y-1 transition-all duration-300 h-full">
-                    <div
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform duration-300"
-                      style={{ backgroundColor: `${spec.color || '#3b82f6'}15` }}
-                    >
-                      {spec.icon || '🏥'}
+              {specialities.map((spec, i) => {
+                const IconComponent = getSpecialityIcon(spec.name)
+                return (
+                  <motion.div
+                    key={spec.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <div className="card p-6 group hover:-translate-y-1 transition-all duration-300 h-full">
+                      <div
+                        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 text-primary-600"
+                        style={{ backgroundColor: `${spec.color || '#3b82f6'}15` }}
+                      >
+                        <IconComponent />
+                      </div>
+                      <h3 className="font-bold text-primary-900 font-display mb-2 group-hover:text-primary-600 transition-colors">
+                        {spec.name}
+                      </h3>
+                      <p className="text-slate-500 text-sm leading-relaxed mb-4">
+                        {spec.description}
+                      </p>
+                      <Link
+                        to="/doctors"
+                        className="inline-flex items-center gap-1.5 text-primary-600 text-sm font-semibold hover:gap-2.5 transition-all duration-200"
+                      >
+                        Find Doctors <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
-                    <h3 className="font-bold text-primary-900 font-display mb-2 group-hover:text-primary-600 transition-colors">
-                      {spec.name}
-                    </h3>
-                    <p className="text-slate-500 text-sm leading-relaxed mb-4">
-                      {spec.description}
-                    </p>
-                    <Link
-                      to="/doctors"
-                      className="inline-flex items-center gap-1.5 text-primary-600 text-sm font-semibold hover:gap-2.5 transition-all duration-200"
-                    >
-                      Find Doctors <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                )
+              })}
             </div>
           )}
         </div>

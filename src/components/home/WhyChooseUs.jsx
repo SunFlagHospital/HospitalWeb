@@ -19,15 +19,16 @@ export default function WhyChooseUs() {
       {/* Main Why Choose Us Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: Image */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="relative"
+              className="relative flex justify-center lg:justify-start"
             >
-              <div className="relative rounded-3xl overflow-hidden shadow-premium h-[500px]">
+              {/* Image Container - Fixed height prevents layout shift */}
+              <div className="w-full relative rounded-3xl overflow-hidden shadow-premium h-[400px] sm:h-[450px] lg:h-[500px] flex-shrink-0">
                 <ResponsiveImage
                   src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80"
                   alt="Advanced hospital technology"
@@ -35,26 +36,26 @@ export default function WhyChooseUs() {
                   className="w-full h-full"
                   objectFit="cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/40 to-transparent pointer-events-none" />
               </div>
 
-              {/* Floating card */}
-              <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-card-hover p-5 max-w-xs">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-medical-green/10 rounded-xl flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-medical-green" />
+              {/* Floating cards - repositioned to avoid overflow */}
+              <div className="absolute bottom-4 right-4 lg:bottom-8 lg:right-8 bg-white rounded-xl shadow-lg p-3 sm:p-4 max-w-xs">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-medical-green/10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-medical-green" />
                   </div>
-                  <div>
-                    <p className="font-bold text-primary-900 font-display text-sm">NABH Accredited</p>
-                    <p className="text-slate-500 text-xs">Quality Certified Hospital</p>
+                  <div className="min-w-0">
+                    <p className="font-bold text-primary-900 font-display text-xs sm:text-sm">NABH Accredited</p>
+                    <p className="text-slate-500 text-xs">Quality Certified</p>
                   </div>
                 </div>
-                <p className="text-slate-600 text-xs">Recognized for exceptional standards in patient care, safety, and medical excellence.</p>
+                <p className="text-slate-600 text-xs leading-relaxed">Recognized for exceptional standards in patient care and safety.</p>
               </div>
 
               {/* Stats pill */}
-              <div className="absolute top-6 -left-6 bg-primary-600 text-white rounded-2xl shadow-premium px-5 py-4">
-                <p className="text-3xl font-bold font-display">20+</p>
+              <div className="absolute top-4 left-4 lg:top-8 lg:left-8 bg-primary-600 text-white rounded-xl lg:rounded-2xl shadow-lg px-3 sm:px-5 py-3 sm:py-4 flex-shrink-0">
+                <p className="text-2xl sm:text-3xl font-bold font-display">20+</p>
                 <p className="text-primary-200 text-xs">Specialist Doctors</p>
               </div>
             </motion.div>
