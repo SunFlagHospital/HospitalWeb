@@ -67,10 +67,14 @@
         formData.append('useUniqueFileName', 'true')
         
         // Add authentication parameters
-        formData.append('publicKey', authData.publicKey)
-formData.append('token', authData.token)
-formData.append('signature', authData.signature)
-formData.append('expire', authData.expire)
+        formData.append(
+  "publicKey",
+  import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY
+);
+
+formData.append("token", authData.token);
+formData.append("signature", authData.signature);
+formData.append("expire", authData.expire);
 
         console.log('📦 Uploading file to ImageKit...', {
           fileName: file.name,

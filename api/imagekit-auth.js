@@ -6,16 +6,21 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   try {
-    const authParams =
+    const authenticationParameters =
       imagekit.getAuthenticationParameters();
 
-    return res.status(200).json(authParams);
+    res.status(200).json({
+      token: authenticationParameters.token,
+      expire: authenticationParameters.expire,
+      signature: authenticationParameters.signature,
+      publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    });
   } catch (error) {
-    console.error("ImageKit Auth Error:", error);
+    console.error(error);
 
-    return res.status(500).json({
+    res.status(500).json({
       error: "Authentication failed",
     });
   }
