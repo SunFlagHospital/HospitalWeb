@@ -4,5 +4,11 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "api": {
+    "ignorePopularDatabases": true
+  },
+  "env": {
+    "IMAGEKIT_PRIVATE_KEY": "@imagekit_private_key"
+  }
 }

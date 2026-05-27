@@ -40,23 +40,63 @@ export default function ImageKitUpload({
 
     setUploading(true)
     try {
+      // Step 1: Get authentication token from backend
+      console.log('📡 Requesting ImageKit authentication token...')
+      const authResponse = await fetch('/api/imagekit-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      if (!authResponse.ok) {
+        const authError = await authResponse.json()
+        console.error('❌ Auth endpoint error:', authError)
+        throw new Error(`Authentication failed: ${authError.error || authResponse.statusText}`)
+      }
+
+      const authData = await authResponse.json()
+      console.log('✅ Auth token received', {
+        expire: authData.expire,
+        signatureLength: authData.signature.length
+      })
+
+      // Step 2: Prepare FormData with authentication
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('publicKey', publicKey)
       formData.append('fileName', file.name)
       formData.append('useUniqueFileName', 'true')
+      
+      // Add authentication parameters
+      formData.append('publicKey', authData.token)
+      formData.append('signature', authData.signature)
+      formData.append('expire', authData.expire)
+      formData.append('token', authData.token)
 
-      const response = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+      console.log('📦 Uploading file to ImageKit...', {
+        fileName: file.name,
+        fileSize: file.size,
+        publicKey: authData.token.substring(0, 10) + '...'
+      })
+
+      // Step 3: Upload to ImageKit
+      const uploadResponse = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
         method: 'POST',
         body: formData,
       })
 
-      if (!response.ok) {
-        throw new Error('Upload failed')
+      const uploadData = await uploadResponse.json()
+
+      if (!uploadResponse.ok) {
+        console.error('❌ ImageKit upload error response:', uploadData)
+        throw new Error(`ImageKit error: ${uploadData.message || uploadData.error || uploadResponse.statusText}`)
       }
 
-      const data = await response.json()
-      const imageUrl = data.url || `${urlEndpoint}${data.filePath}`
+      console.log('✅ Upload successful', {
+        url: uploadData.url,
+        filePath: uploadData.filePath,
+        fileId: uploadData.fileId
+      })
+
+      const imageUrl = uploadData.url || `${urlEndpoint}${uploadData.filePath}`
 
       // Show preview
       if (showPreview) {
@@ -65,15 +105,15 @@ export default function ImageKitUpload({
 
       // Call success callback
       onUploadSuccess(imageUrl)
-      toast.success('Image uploaded successfully!')
+      toast.success('✅ Image uploaded successfully!')
       
       // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
     } catch (error) {
-      console.error('Upload error:', error)
-      toast.error('Failed to upload image. Please try again.')
+      console.error('❌ Complete upload error:', error)
+      toast.error(`Upload failed: ${error.message || 'Please try again.'}`)
     } finally {
       setUploading(false)
       setDragActive(false)
