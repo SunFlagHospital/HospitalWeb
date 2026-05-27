@@ -14,7 +14,7 @@ const fields = [
   { name: 'speciality', label: 'Speciality / Sub-specialty', required: true, placeholder: 'e.g. Interventional Cardiology' },
   { name: 'qualification', label: 'Qualifications', required: true, placeholder: 'MBBS, MD, DM (Cardiology)' },
   { name: 'experience', label: 'Experience', required: true, placeholder: 'e.g. 15 Years' },
-  { name: 'image', label: 'Photo URL (or upload below)', type: 'url', placeholder: 'https://...' },
+  { name: 'image', label: 'Photo URL (optional - upload instead if you want)', type: 'url', placeholder: 'https://...' },
   { name: 'bio', label: 'Short Bio', type: 'textarea', placeholder: 'Brief professional biography...', rows: 3 },
   { name: 'available', label: 'Available for Appointments', type: 'checkbox' },
 ]

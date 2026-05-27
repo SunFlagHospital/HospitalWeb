@@ -6,7 +6,7 @@ import { galleryService } from '@/firebase/services'
 
 const fields = [
   { name: 'title', label: 'Title', required: true, placeholder: 'Image title' },
-  { name: 'image', label: 'Image URL (or upload below)', required: true, placeholder: 'https://cdn.example.com/img.webp', type: 'url' },
+  { name: 'image', label: 'Image URL (optional - upload instead if you want)', required: false, placeholder: 'https://cdn.example.com/img.webp', type: 'url' },
   { name: 'category', label: 'Category', placeholder: 'e.g., Facilities, Doctors', required: false },
 ]
 

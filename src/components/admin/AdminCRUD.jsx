@@ -61,6 +61,13 @@ export default function AdminCRUD({
 
   const onSubmit = async (data) => {
     try {
+      // Check if image field exists and is required
+      const hasImageField = fields.some(f => f.name === 'image' || f.name.includes('image') || f.name.includes('photo'))
+      if (hasImageField && !data.image) {
+        toast.error('Please upload an image or provide an image URL')
+        return
+      }
+
       if (modal === 'add') {
         await onAdd(data)
         toast.success(`${title} added successfully!`)
