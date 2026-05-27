@@ -61,13 +61,6 @@ export default function AdminCRUD({
 
   const onSubmit = async (data) => {
     try {
-      // Check if image field exists and is required
-      const hasImageField = fields.some(f => f.name === 'image' || f.name.includes('image') || f.name.includes('photo'))
-      if (hasImageField && !data.image) {
-        toast.error('Please upload an image or provide an image URL')
-        return
-      }
-
       if (modal === 'add') {
         await onAdd(data)
         toast.success(`${title} added successfully!`)
@@ -218,6 +211,13 @@ export default function AdminCRUD({
                   </div>
                 )}
 
+                {/* ⭐ ImageKit Upload Section - VISIBLE RIGHT HERE */}
+                {renderExtraFields && (
+                  <div className="mb-6">
+                    {renderExtraFields()}
+                  </div>
+                )}
+
                 {/* Form Fields */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   {fields.map(({ name, label, type = 'text', required, options, placeholder, rows }) => (
@@ -264,9 +264,6 @@ export default function AdminCRUD({
                     </div>
                   ))}
                 </div>
-
-                {/* Extra Fields (ImageKit Upload, etc) */}
-                {renderExtraFields && renderExtraFields()}
 
                 <div className="flex gap-3 pt-2 border-t border-slate-200 mt-6">
                   <button type="button" onClick={closeModal} className="btn-secondary flex-1 justify-center">
