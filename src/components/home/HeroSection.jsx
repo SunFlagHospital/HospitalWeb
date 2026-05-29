@@ -42,20 +42,23 @@ export default function HeroSection() {
     <section className="relative min-h-screen pt-20 sm:pt-24 flex items-center overflow-x-hidden">
       {/* Background Image - Responsive with WebP */}
       <picture className="absolute inset-0 w-full h-full">
-        <source 
-          media="(max-width: 640px)"
-          srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?w=800&h=1200&format=webp 1x"
-          type="image/webp"
-        />
-        <source 
-          media="(max-width: 1024px)"
-          srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?w=1280&h=720&format=webp 1x"
-          type="image/webp"
-        />
-        <source 
-          srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?w=1920&h=1080&format=webp 1x"
-          type="image/webp"
-        />
+       <source
+  media="(max-width: 640px)"
+  srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?tr=w-800,h-1200,f-webp,q-70 1x"
+  type="image/webp"
+/>
+
+<source
+  media="(max-width: 1024px)"
+  srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?tr=w-1280,h-720,f-webp,q-75 1x"
+  type="image/webp"
+/>
+
+<source
+  media="(min-width: 1025px)"
+  srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?tr=w-1920,h-1080,f-webp,q-80 1x"
+  type="image/webp"
+/>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
