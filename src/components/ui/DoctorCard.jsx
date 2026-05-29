@@ -22,7 +22,7 @@ function DoctorCard({ doctor, index = 0 }) {
       {/* Image Container with responsive heights and proper aspect ratio */}
       <div className="relative overflow-hidden bg-gradient-soft flex-shrink-0
   w-full h-[320px] sm:h-[360px] lg:h-[400px]
-  flex items-center justify-center bg-white">
+  flex items-center justify-center pt-5 bg-white">
         {/* Skeleton loader before image loads */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 animate-pulse" />
