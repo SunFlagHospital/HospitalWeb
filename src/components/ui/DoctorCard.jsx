@@ -17,12 +17,12 @@ function DoctorCard({ doctor, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="card group cursor-pointer hover:-translate-y-2 transition-all duration-300 h-full flex flex-col"
+      className="card group cursor-pointer hover:-translate-y-2 transition-all duration-300 h-full flex flex-col overflow-hidden"
     >
-      {/* Image Container with responsive heights */}
+      {/* Image Container with responsive heights and proper aspect ratio */}
       <div className="relative overflow-hidden bg-gradient-soft flex-shrink-0
-        h-60 sm:h-72 lg:h-80 
-        w-full">
+  w-full h-[320px] sm:h-[360px] lg:h-[400px]
+  flex items-center justify-center bg-white">
         {/* Skeleton loader before image loads */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 animate-pulse" />
@@ -35,7 +35,8 @@ function DoctorCard({ doctor, index = 0 }) {
           width={500}
           height={600}
           className="w-full h-full"
-          objectFit="cover"
+          objectFit="contain"
+          objectPosition="center"
           onLoad={handleImageLoad}
           placeholder={false}
         />
@@ -63,59 +64,59 @@ function DoctorCard({ doctor, index = 0 }) {
       </div>
 
       {/* Content Section */}
-      <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col">
+      <div className="p-3 sm:p-4 lg:p-6 flex-grow flex flex-col">
         {/* Doctor Name & Speciality */}
-        <div className="mb-3 sm:mb-4">
-          <h3 className="font-bold text-primary-900 font-display text-base sm:text-lg 
+       <div className="mb-2 sm:mb-3 lg:mb-4">
+         <h3 className="font-bold text-primary-900 font-display text-sm sm:text-base lg:text-lg 
             group-hover:text-primary-600 transition-colors duration-200 
             leading-snug line-clamp-2">
             Dr. {doctor.name}
           </h3>
-          <p className="text-accent font-semibold text-sm sm:text-base mt-1 
+         <p className="text-accent font-semibold text-xs sm:text-sm lg:text-base mt-0.5 sm:mt-1 
             group-hover:text-accent-dark transition-colors duration-200">
             {doctor.speciality}
           </p>
         </div>
 
         {/* Experience & Professional Details */}
-        <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 flex-grow">
+       <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 lg:mb-5 flex-grow">
           {/* Department */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Department: ${doctor.department}`}>
-            <Stethoscope className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
+         <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Department: ${doctor.department}`}>
+           <Stethoscope className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="line-clamp-1">{doctor.department}</span>
           </div>
 
           {/* Experience */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Experience: ${doctor.experience || 'Not specified'}`}>
-            <Calendar className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
+         <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Experience: ${doctor.experience || 'Not specified'}`}>
+           <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="line-clamp-1">{doctor.experience || 'Experience info not available'}</span>
           </div>
 
           {/* Qualification */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Qualification: ${doctor.qualification}`}>
-            <Award className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
+         <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Qualification: ${doctor.qualification}`}>
+           <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="line-clamp-1">{doctor.qualification}</span>
           </div>
 
           {/* Previous Hospital/Experience - new field */}
           {doctor.previousHospital && (
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Previously: ${doctor.previousHospital}`}>
-              <Briefcase className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
+           <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Previously: ${doctor.previousHospital}`}>
+             <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
               <span className="line-clamp-1">Ex. {doctor.previousHospital}</span>
             </div>
           )}
 
           {/* Expertise - new field */}
           {doctor.expertise && (
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Expertise: ${doctor.expertise}`}>
-              <BookOpen className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
+           <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Expertise: ${doctor.expertise}`}>
+             <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
               <span className="line-clamp-1">{doctor.expertise}</span>
             </div>
           )}
 
           {/* Short description - new field */}
           {doctor.bio && (
-            <p className="text-xs sm:text-sm text-slate-600 mt-2 line-clamp-2 italic">
+           <p className="text-xs sm:text-sm text-slate-600 mt-1.5 sm:mt-2 line-clamp-2 italic">
               {doctor.bio}
             </p>
           )}
@@ -124,16 +125,16 @@ function DoctorCard({ doctor, index = 0 }) {
         {/* CTA Button */}
         <Link
           to="/contact"
-          className="flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 
+         className="flex items-center justify-center gap-2 w-full py-2 sm:py-2.5 lg:py-3 
             bg-primary-50 hover:bg-primary-600 
             text-primary-600 hover:text-white 
-            rounded-xl text-xs sm:text-sm font-semibold 
+           rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold 
             transition-all duration-200 group/btn
             mt-auto shadow-sm hover:shadow-md"
           aria-label={`Book appointment with Dr. ${doctor.name}`}
         >
           Book Appointment
-          <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true" />
+         <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true" />
         </Link>
       </div>
     </motion.div>

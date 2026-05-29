@@ -14,22 +14,22 @@ function SkeletonDoctorCard() {
   return (
     <div className="card h-full flex flex-col overflow-hidden animate-pulse">
       {/* Image skeleton */}
-      <div className="h-60 sm:h-72 lg:h-80 w-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200" />
+      <div className="h-56 sm:h-64 lg:h-72 w-full bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200" />
 
       {/* Content skeleton */}
-      <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col">
-        <div className="mb-3 sm:mb-4 space-y-2">
-          <div className="h-5 sm:h-6 bg-slate-200 rounded-lg w-3/4" />
-          <div className="h-4 sm:h-5 bg-slate-200 rounded-lg w-1/2" />
+      <div className="p-3 sm:p-4 lg:p-6 flex-grow flex flex-col">
+        <div className="mb-2 sm:mb-3 lg:mb-4 space-y-2">
+          <div className="h-4 sm:h-5 lg:h-6 bg-slate-200 rounded-lg w-3/4" />
+          <div className="h-3 sm:h-4 lg:h-5 bg-slate-200 rounded-lg w-1/2" />
         </div>
 
-        <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 flex-grow">
-          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-full" />
-          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-5/6" />
-          <div className="h-3.5 sm:h-4 bg-slate-200 rounded-lg w-2/3" />
+        <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 lg:mb-5 flex-grow">
+          <div className="h-3 sm:h-3.5 lg:h-4 bg-slate-200 rounded-lg w-full" />
+          <div className="h-3 sm:h-3.5 lg:h-4 bg-slate-200 rounded-lg w-5/6" />
+          <div className="h-3 sm:h-3.5 lg:h-4 bg-slate-200 rounded-lg w-2/3" />
         </div>
 
-        <div className="h-10 sm:h-11 bg-slate-200 rounded-xl w-full mt-auto" />
+        <div className="h-9 sm:h-10 lg:h-11 bg-slate-200 rounded-lg sm:rounded-xl w-full mt-auto" />
       </div>
     </div>
   )
@@ -75,8 +75,8 @@ export default function Doctors() {
         pageSlug="doctors"
       />
 
-      <section className="py-12 sm:py-20 bg-gradient-soft">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-soft">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="Our Team"
             title="Meet Our Specialists"
@@ -85,7 +85,7 @@ export default function Doctors() {
 
           {/* Filters */}
           <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <div className="relative flex-1 max-w-md w-full sm:w-auto">
+            <div className="relative flex-1 max-w-full sm:max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
@@ -114,7 +114,7 @@ export default function Doctors() {
 
           {/* Loading State - Improved skeleton with proper card heights */}
           {loading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mt-8 sm:mt-12">
               {Array.from({ length: 6 }).map((_, i) => (
                 <SkeletonDoctorCard key={i} />
               ))}
@@ -150,7 +150,7 @@ export default function Doctors() {
 
           {/* Grid - with auto-height cards for equal spacing */}
           {!loading && !error && filtered.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mt-8 sm:mt-12">
               {filtered.map((doc, i) => (
                 <motion.div
                   key={doc.id}

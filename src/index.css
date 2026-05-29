@@ -119,6 +119,18 @@
     object-position: center top;
   }
 
+  /* Responsive image container - better mobile support */
+  .responsive-img-container {
+    @apply relative overflow-hidden w-full;
+    aspect-ratio: auto;
+  }
+
+  .responsive-img-container img {
+    @apply w-full h-full block;
+    object-fit: cover;
+    object-position: center;
+  }
+
   /* Smooth loading transition */
   .image-loading {
     @apply animate-pulse;
