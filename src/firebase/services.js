@@ -30,10 +30,33 @@ const createService = (collectionName) => ({
     await deleteDoc(doc(db, collectionName, id))
   },
   subscribe: (callback, constraints = []) => {
-    const q = query(collection(db, collectionName), ...constraints)
-    return onSnapshot(q, snap => {
-      callback(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-    })
+    try {
+      const q = query(collection(db, collectionName), ...constraints)
+      console.debug(`📡 Setting up real-time listener for collection: ${collectionName}`, {
+        constraintsCount: constraints.length,
+        timestamp: new Date().toISOString()
+      })
+      
+      return onSnapshot(
+        q,
+        snap => {
+          const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          console.debug(`✅ Snapshot received for ${collectionName}:`, {
+            docCount: docs.length,
+            timestamp: new Date().toISOString()
+          })
+          callback(docs || [])
+        },
+        error => {
+          console.error(`❌ Error listening to ${collectionName}:`, error)
+          // Still call callback with empty array to handle UI gracefully
+          callback([])
+        }
+      )
+    } catch (error) {
+      console.error(`❌ Error setting up listener for ${collectionName}:`, error)
+      return () => {} // Return no-op unsubscribe
+    }
   }
 })
 
@@ -53,6 +76,8 @@ export const applicationsService = createService('jobApplications')
 export const galleryService = createService('gallery')
 // Videos collection
 export const videosService = createService('videos')
+// Insurance Partners collection
+export const insurancePartnersService = createService('insurancePartners')
 
 // Small helper to set a single contact document with a fixed ID
 export const setContact = async (id, data) => {
@@ -94,5 +119,10 @@ export const fetchVideos = (constraints) => videosService.getAll(constraints)
 export const addVideo = (data) => videosService.add(data)
 export const updateVideo = (id, data) => videosService.update(id, data)
 export const deleteVideo = (id) => videosService.delete(id)
+
+export const fetchInsurancePartners = (constraints) => insurancePartnersService.getAll(constraints)
+export const addInsurancePartner = (data) => insurancePartnersService.add(data)
+export const updateInsurancePartner = (id, data) => insurancePartnersService.update(id, data)
+export const deleteInsurancePartner = (id) => insurancePartnersService.delete(id)
 
 export { orderBy, where, limit }

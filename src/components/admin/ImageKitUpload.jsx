@@ -2,6 +2,36 @@
   import { Upload, X, Loader } from 'lucide-react'
   import toast from 'react-hot-toast'
 
+  /**
+   * Safe JSON parsing helper
+   * Returns parsed JSON or empty object if parsing fails
+   */
+  const safeParseJSON = async (response) => {
+    try {
+      const text = await response.text()
+      console.debug('📝 Response body:', {
+        length: text?.length || 0,
+        isEmpty: !text || text.trim() === '',
+        preview: text?.substring(0, 100) || '(empty)'
+      })
+      
+      if (!text || text.trim() === '') {
+        console.warn('⚠️ Empty response body')
+        return {}
+      }
+      
+      const parsed = JSON.parse(text)
+      console.debug('✅ JSON parsed successfully')
+      return parsed
+    } catch (error) {
+      console.error('❌ JSON parse error:', {
+        error: error.message,
+        responseLength: response?.headers?.get('content-length')
+      })
+      return {}
+    }
+  }
+
   export default function ImageKitUpload({ 
     onUploadSuccess, 
     label = 'Upload Image',
@@ -47,17 +77,34 @@
           headers: { 'Content-Type': 'application/json' }
         })
 
+        console.debug('🔐 Auth response status:', authResponse.status, {
+          statusText: authResponse.statusText,
+          contentType: authResponse.headers.get('content-type')
+        })
+
         if (!authResponse.ok) {
-          const authError = await authResponse.json()
-          console.error('❌ Auth endpoint error:', authError)
+          console.error('❌ Auth endpoint returned:', authResponse.status)
+          const authError = await safeParseJSON(authResponse)
           throw new Error(`Authentication failed: ${authError.error || authResponse.statusText}`)
         }
 
-        const authData = await authResponse.json()
+        const authData = await safeParseJSON(authResponse)
+        
+        // Validate required fields
+        if (!authData.token || !authData.signature || !authData.expire) {
+          console.error('❌ Missing required auth fields:', {
+            token: !!authData.token,
+            signature: !!authData.signature,
+            expire: !!authData.expire,
+            fullResponse: authData
+          })
+          throw new Error('Invalid authentication response: missing required fields')
+        }
+
         console.log('✅ Auth token received', {
           expire: authData.expire,
           signatureLength: authData.signature.length,
-          token: authData.token
+          token: authData.token?.substring(0, 20) + '...'
         })
 
         // Step 2: Prepare FormData with authentication
@@ -67,19 +114,15 @@
         formData.append('useUniqueFileName', 'true')
         
         // Add authentication parameters
-        formData.append(
-  "publicKey",
-  import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY
-);
-
-formData.append("token", authData.token);
-formData.append("signature", authData.signature);
-formData.append("expire", authData.expire);
+        formData.append('publicKey', publicKey)
+        formData.append('token', authData.token)
+        formData.append('signature', authData.signature)
+        formData.append('expire', authData.expire)
 
         console.log('📦 Uploading file to ImageKit...', {
           fileName: file.name,
           fileSize: file.size,
-          publicKey: authData.publicKey.substring(0, 10) + '...'
+          publicKey: publicKey.substring(0, 10) + '...'
         })
 
         // Step 3: Upload to ImageKit
@@ -88,11 +131,25 @@ formData.append("expire", authData.expire);
           body: formData,
         })
 
-        const uploadData = await uploadResponse.json()
+        console.debug('📤 ImageKit upload response status:', uploadResponse.status, {
+          statusText: uploadResponse.statusText,
+          contentType: uploadResponse.headers.get('content-type'),
+          contentLength: uploadResponse.headers.get('content-length')
+        })
+
+        const uploadData = await safeParseJSON(uploadResponse)
 
         if (!uploadResponse.ok) {
-          console.error('❌ ImageKit upload error response:', uploadData)
-          throw new Error(`ImageKit error: ${uploadData.message || uploadData.error || uploadResponse.statusText}`)
+          console.error('❌ ImageKit upload error response:', {
+            status: uploadResponse.status,
+            data: uploadData
+          })
+          throw new Error(`ImageKit error (${uploadResponse.status}): ${uploadData.message || uploadData.error || uploadResponse.statusText}`)
+        }
+
+        if (!uploadData.url && !uploadData.filePath) {
+          console.error('❌ Invalid ImageKit response:', uploadData)
+          throw new Error('Invalid upload response: missing URL or file path')
         }
 
         console.log('✅ Upload successful', {
@@ -117,7 +174,10 @@ formData.append("expire", authData.expire);
           fileInputRef.current.value = ''
         }
       } catch (error) {
-        console.error('❌ Complete upload error:', error)
+        console.error('❌ Complete upload error:', {
+          message: error.message,
+          stack: error.stack
+        })
         toast.error(`Upload failed: ${error.message || 'Please try again.'}`)
       } finally {
         setUploading(false)

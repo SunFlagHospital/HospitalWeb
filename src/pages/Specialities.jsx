@@ -13,13 +13,13 @@ export default function Specialities() {
   return (
     <>
       <SEO
-        title="Medical Specialities | 50+ Departments"
-        description="Sunflag Global Hospital offers 50+ medical specialities — Cardiology, Neurology, Orthopedics, Oncology, Gynecology, Pediatrics, and more in Rohtak."
+        title="Medical Specialities | 20+ Departments"
+        description="Sunflag Global Hospital offers 20+ medical specialities — Cardiology, Neurology, Orthopedics, Oncology, Gynecology, Pediatrics, and more in Rohtak."
         canonical="/specialities"
       />
       <PageBanner
         title="Medical Specialities"
-        subtitle="World-class care across 50+ specialities with India's finest medical specialists"
+        subtitle="World-class care across 20+ specialities with India's finest medical specialists"
         breadcrumb={[{ label: 'Specialities' }]}
         imageUrl="https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=1600&q=80"
         pageSlug="specialities"

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, Briefcase, Award, FileText, Star, Image, Phone, TrendingUp, ArrowRight, Activity, Mail } from 'lucide-react'
-import { doctorsService, servicesService, careersService, testimonialsService, galleryService } from '@/firebase/services'
+import { Users, Briefcase, Award, FileText, Star, Image, Phone, TrendingUp, ArrowRight, Activity, Mail, Building2 } from 'lucide-react'
+import { doctorsService, servicesService, careersService, testimonialsService, galleryService, insurancePartnersService } from '@/firebase/services'
 
 const statCards = [
   { label: 'Total Doctors', icon: Users, color: 'text-primary-600', bg: 'bg-primary-50', path: '/admin/doctors', service: doctorsService },
   { label: 'Services', icon: Briefcase, color: 'text-accent', bg: 'bg-sky-50', path: '/admin/services', service: servicesService },
   { label: 'Job Openings', icon: FileText, color: 'text-amber-600', bg: 'bg-amber-50', path: '/admin/careers', service: careersService },
-  { label: 'Gallery Items', icon: Image, color: 'text-purple-600', bg: 'bg-purple-50', path: '/admin/gallery', service: galleryService },
+  { label: 'Insurance Partners', icon: Building2, color: 'text-emerald-600', bg: 'bg-emerald-50', path: '/admin/insurance', service: insurancePartnersService },
 ]
 
 const quickLinks = [
@@ -16,6 +16,7 @@ const quickLinks = [
   { label: 'Manage Services', path: '/admin/services', icon: Briefcase, desc: 'Update hospital services and offerings' },
   { label: 'Manage Specialities', path: '/admin/specialities', icon: Award, desc: 'Edit speciality categories and info' },
   { label: 'Manage Careers', path: '/admin/careers', icon: FileText, desc: 'Post and manage job openings' },
+  { label: 'Manage Insurance Partners', path: '/admin/insurance', icon: Building2, desc: 'Manage insurance and TPA partnerships' },
   { label: 'Manage Gallery', path: '/admin/gallery', icon: Image, desc: 'Upload and manage gallery images' },
   { label: 'Manage Banners', path: '/admin/banners', icon: Image, desc: 'Update hero and page banner images' },
   { label: 'Contact Details', path: '/admin/contact', icon: Phone, desc: 'Update hospital contact information' },

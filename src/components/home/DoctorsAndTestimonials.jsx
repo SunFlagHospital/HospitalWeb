@@ -29,6 +29,16 @@ function SkeletonDoctorCard() {
 export function DoctorsPreview() {
   const { data: doctors, loading } = useDoctors()
 
+  // Safe sorting: displayOrder ascending, then by name, then place doctors without displayOrder at end
+  const sorted = [...doctors].sort((a, b) => {
+    if (a.displayOrder !== undefined && b.displayOrder !== undefined) {
+      return a.displayOrder - b.displayOrder
+    }
+    if (a.displayOrder !== undefined) return -1
+    if (b.displayOrder !== undefined) return 1
+    return a.name.localeCompare(b.name)
+  })
+
   return (
     <section className="py-20 bg-gradient-soft">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,10 +56,10 @@ export function DoctorsPreview() {
               ))}
             </div>
           </>
-        ) : doctors.length > 0 ? (
+        ) : sorted.length > 0 ? (
           <>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-              {doctors.slice(0, 3).map((doc, i) => (
+              {sorted.slice(0, 3).map((doc, i) => (
                 <motion.div
                   key={doc.id}
                   initial={{ opacity: 0, y: 20 }}

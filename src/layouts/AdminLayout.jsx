@@ -2,7 +2,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/firebase/AuthContext'
 import {
   LayoutDashboard, Users, Briefcase, Star, Award,
-  FileText, Phone, Image, LogOut, Activity, ChevronRight, Menu, X, Play, FolderOpen
+  FileText, Image, LogOut, Activity, ChevronRight, Menu, X, FolderOpen, Building2
 } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
@@ -15,10 +15,8 @@ const navItems = [
   { path: '/admin/specialities', label: 'Specialities', icon: Award },
   { path: '/admin/careers', label: 'Careers', icon: FileText },
   { path: '/admin/testimonials', label: 'Testimonials', icon: Star },
-  { path: '/admin/banners', label: 'Banners', icon: Image },
-  { path: '/admin/contact', label: 'Contact Info', icon: Phone },
+  { path: '/admin/insurance', label: 'Insurance', icon: Building2 },
   { path: '/admin/gallery', label: 'Gallery', icon: FolderOpen },
-  { path: '/admin/videos', label: 'Videos', icon: Play },
   { path: '/admin/applications', label: 'Applications', icon: Users },
 ]
 

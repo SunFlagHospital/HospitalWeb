@@ -13,9 +13,12 @@ const fields = [
   ]},
   { name: 'speciality', label: 'Speciality / Sub-specialty', required: true, placeholder: 'e.g. Interventional Cardiology' },
   { name: 'qualification', label: 'Qualifications', required: true, placeholder: 'MBBS, MD, DM (Cardiology)' },
-  { name: 'experience', label: 'Experience', required: true, placeholder: 'e.g. 15 Years' },
+  { name: 'experience', label: 'Experience', required: true, placeholder: 'e.g. 15+ Years' },
+  { name: 'previousHospital', label: 'Previous Hospital / Ex Experience', placeholder: 'e.g. PGIMS Rohtak' },
+  { name: 'expertise', label: 'Expertise / Special Skills', placeholder: 'e.g. Specialized in Brain & Spine Procedures' },
+  { name: 'displayOrder', label: 'Display Order (Lower number = Higher priority)', type: 'number', placeholder: '1, 2, 3, etc.', min: 0, help: 'Doctors will be sorted by this order on the Doctors page' },
   { name: 'image', label: 'Photo URL (optional - upload instead if you want)', type: 'url', placeholder: 'https://...' },
-  { name: 'bio', label: 'Short Bio', type: 'textarea', placeholder: 'Brief professional biography...', rows: 3 },
+  { name: 'bio', label: 'Short Bio / Professional Description', type: 'textarea', placeholder: 'Brief professional biography and specializations...', rows: 3 },
   { name: 'available', label: 'Available for Appointments', type: 'checkbox' },
 ]
 
@@ -33,6 +36,9 @@ function DoctorCard({ item: doc }) {
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-slate-800 font-display text-sm truncate">{doc.name}</h3>
           <p className="text-accent text-xs font-semibold">{doc.speciality}</p>
+          {doc.displayOrder !== undefined && (
+            <p className="text-slate-500 text-xs mt-1">Order: #{doc.displayOrder}</p>
+          )}
         </div>
         {doc.available
           ? <CheckCircle2 className="w-4 h-4 text-medical-green flex-shrink-0" />
@@ -49,13 +55,26 @@ function DoctorCard({ item: doc }) {
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
           <Calendar className="w-3 h-3" /> {doc.experience}
         </div>
+        {doc.previousHospital && (
+          <div className="flex items-center gap-1.5 text-xs text-slate-500">
+            <span className="font-semibold">📍 Ex:</span> {doc.previousHospital}
+          </div>
+        )}
+        {doc.expertise && (
+          <div className="flex items-center gap-1.5 text-xs text-slate-500">
+            <span className="font-semibold">⭐ Expertise:</span> {doc.expertise}
+          </div>
+        )}
+        {doc.bio && (
+          <p className="text-xs text-slate-600 mt-2 italic line-clamp-2">{doc.bio}</p>
+        )}
       </div>
     </div>
   )
 }
 
 export default function AdminDoctors() {
-  const { data: doctors, loading } = useAdminDoctors()
+  const { data: doctors, loading, error } = useAdminDoctors()
   const [formData, setFormData] = useState({})
 
   const handleImageUpload = (imageUrl) => {
@@ -83,6 +102,7 @@ export default function AdminDoctors() {
       title="Doctor"
       items={doctors}
       loading={loading}
+      error={error}
       fields={fields}
       onAdd={handleAdd}
       onUpdate={handleUpdate}

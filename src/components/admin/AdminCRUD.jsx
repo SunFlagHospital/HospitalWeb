@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Pencil, Trash2, X, Save, Search, Eye } from 'lucide-react'
+import { Plus, Pencil, Trash2, X, Save, Search, Eye, AlertCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import ConfirmDialog from './ConfirmDialog'
@@ -23,6 +23,7 @@ export default function AdminCRUD({
   title,
   items = [],
   loading,
+  error,
   fields = [],
   onAdd,
   onUpdate,
@@ -123,6 +124,17 @@ export default function AdminCRUD({
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="admin-card animate-pulse h-40 bg-slate-100" />
           ))}
+        </div>
+      ) : error ? (
+        <div className="admin-card bg-red-50 border border-red-200 p-4 sm:p-6">
+          <div className="flex gap-3 items-start">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-bold text-red-900 mb-1">Error Loading Data</h3>
+              <p className="text-red-700 text-sm">{error}</p>
+              <p className="text-red-600 text-xs mt-2">📍 Check browser console for more details</p>
+            </div>
+          </div>
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-12 sm:py-16 text-slate-400">

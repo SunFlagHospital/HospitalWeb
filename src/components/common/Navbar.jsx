@@ -11,6 +11,7 @@ const navLinks = [
   { path: '/specialities', label: 'Specialities' },
   { path: '/services', label: 'Services' },
   { path: '/doctors', label: 'Doctors' },
+  { path: '/insurance', label: 'Insurance & TPA' },
   { path: '/gallery', label: 'Gallery' },
   { path: '/careers', label: 'Careers' },
   { path: '/contact', label: 'Contact' },

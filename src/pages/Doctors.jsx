@@ -40,13 +40,25 @@ export default function Doctors() {
   const [dept, setDept] = useState('All')
   const { data: doctors, loading, error } = useAllDoctors()
 
-  const filtered = doctors.filter(d => {
-    const matchDept = dept === 'All' || d.department === dept
-    const matchSearch = d.name.toLowerCase().includes(search.toLowerCase()) ||
-      (d.department && d.department.toLowerCase().includes(search.toLowerCase())) ||
-      (d.speciality && d.speciality.toLowerCase().includes(search.toLowerCase()))
-    return matchDept && matchSearch
-  })
+  const filtered = doctors
+    .sort((a, b) => {
+      // Sort by displayOrder if both have it
+      if (a.displayOrder !== undefined && b.displayOrder !== undefined) {
+        return a.displayOrder - b.displayOrder
+      }
+      // If only one has displayOrder, it comes first
+      if (a.displayOrder !== undefined) return -1
+      if (b.displayOrder !== undefined) return 1
+      // Fallback: sort by name
+      return a.name.localeCompare(b.name)
+    })
+    .filter(d => {
+      const matchDept = dept === 'All' || d.department === dept
+      const matchSearch = d.name.toLowerCase().includes(search.toLowerCase()) ||
+        (d.department && d.department.toLowerCase().includes(search.toLowerCase())) ||
+        (d.speciality && d.speciality.toLowerCase().includes(search.toLowerCase()))
+      return matchDept && matchSearch
+    })
 
   return (
     <>

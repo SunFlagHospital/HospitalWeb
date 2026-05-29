@@ -82,7 +82,7 @@ export default function About() {
             >
               <div className="rounded-3xl overflow-hidden shadow-premium h-[500px]">
                 <img
-                  src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=800&q=80"
+                  src="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp"
                   alt="Sunflag Global Hospital"
                   className="w-full h-full object-cover"
                 />

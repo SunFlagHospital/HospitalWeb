@@ -13,6 +13,7 @@ const About = lazy(() => import('@/pages/About'))
 const Services = lazy(() => import('@/pages/Services'))
 const Specialities = lazy(() => import('@/pages/Specialities'))
 const Doctors = lazy(() => import('@/pages/Doctors'))
+const Insurance = lazy(() => import('@/pages/Insurance'))
 const Careers = lazy(() => import('@/pages/Careers'))
 const Gallery = lazy(() => import('@/pages/Gallery'))
 const Contact = lazy(() => import('@/pages/Contact'))
@@ -31,6 +32,7 @@ const AdminGallery = lazy(() => import('@/pages/admin/AdminGallery'))
 const AdminApplications = lazy(() => import('@/pages/admin/AdminApplications'))
 const AdminVideos = lazy(() => import('@/pages/admin/AdminVideos'))
 const AdminQueries = lazy(() => import('@/pages/admin/AdminQueries'))
+const AdminInsurance = lazy(() => import('@/pages/admin/AdminInsurance'))
 
 export default function App() {
   return (
@@ -44,6 +46,7 @@ export default function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/specialities" element={<Specialities />} />
             <Route path="/doctors" element={<Doctors />} />
+            <Route path="/insurance" element={<Insurance />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
@@ -65,6 +68,7 @@ export default function App() {
             <Route path="/admin/applications" element={<AdminApplications />} />
             <Route path="/admin/videos" element={<AdminVideos />} />
             <Route path="/admin/queries" element={<AdminQueries />} />
+            <Route path="/admin/insurance" element={<AdminInsurance />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

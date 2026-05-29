@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Award, Stethoscope, ArrowRight } from 'lucide-react'
+import { Calendar, Award, Stethoscope, ArrowRight, Briefcase, BookOpen } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ResponsiveImage from '@/components/common/ResponsiveImage'
 
@@ -62,7 +62,7 @@ function DoctorCard({ doctor, index = 0 }) {
 
       {/* Content Section */}
       <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col">
-        {/* Doctor Info */}
+        {/* Doctor Name & Speciality */}
         <div className="mb-3 sm:mb-4">
           <h3 className="font-bold text-primary-900 font-display text-base sm:text-lg 
             group-hover:text-primary-600 transition-colors duration-200 
@@ -75,20 +75,48 @@ function DoctorCard({ doctor, index = 0 }) {
           </p>
         </div>
 
-        {/* Metadata Section */}
+        {/* Experience & Professional Details */}
         <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 flex-grow">
+          {/* Department */}
           <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
             <Stethoscope className="w-4 h-4 text-primary-500 flex-shrink-0" />
             <span className="line-clamp-1">{doctor.department}</span>
           </div>
+
+          {/* Experience */}
+          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
+            <Calendar className="w-4 h-4 text-primary-500 flex-shrink-0" />
+            <span className="line-clamp-1">{doctor.experience || 'Experience info not available'}</span>
+          </div>
+
+          {/* Qualification */}
           <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
             <Award className="w-4 h-4 text-primary-500 flex-shrink-0" />
             <span className="line-clamp-1">{doctor.qualification}</span>
           </div>
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
-            <Calendar className="w-4 h-4 text-primary-500 flex-shrink-0" />
-            <span>{doctor.experience}</span>
-          </div>
+
+          {/* Previous Hospital/Experience - new field */}
+          {doctor.previousHospital && (
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
+              <Briefcase className="w-4 h-4 text-primary-500 flex-shrink-0" />
+              <span className="line-clamp-1">Ex. {doctor.previousHospital}</span>
+            </div>
+          )}
+
+          {/* Expertise - new field */}
+          {doctor.expertise && (
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
+              <BookOpen className="w-4 h-4 text-primary-500 flex-shrink-0" />
+              <span className="line-clamp-1">{doctor.expertise}</span>
+            </div>
+          )}
+
+          {/* Short description - new field */}
+          {doctor.bio && (
+            <p className="text-xs sm:text-sm text-slate-600 mt-2 line-clamp-2 italic">
+              {doctor.bio}
+            </p>
+          )}
         </div>
 
         {/* CTA Button */}
@@ -110,4 +138,3 @@ function DoctorCard({ doctor, index = 0 }) {
 }
 
 export default memo(DoctorCard)
-
