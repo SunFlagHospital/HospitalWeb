@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { Shield, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Shield, CheckCircle2, AlertCircle, Image as ImageIcon } from 'lucide-react'
+import { useState } from 'react'
 import SEO from '@/seo/SEO'
 import PageBanner from '@/components/common/PageBanner'
 import SectionHeader from '@/components/ui/SectionHeader'
@@ -44,74 +45,179 @@ const defaultInsurancePanels = [
   },
 ]
 
+// Image with fallback and error handling
+function InsuranceImage({ src, alt, className = "" }) {
+  const [imageError, setImageError] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
+
+  const handleError = () => {
+    console.warn(`⚠️ Failed to load image: ${src} (${alt})`)
+    setImageError(true)
+    setImageLoading(false)
+  }
+
+  const handleLoad = () => {
+    setImageError(false)
+    setImageLoading(false)
+  }
+
+  if (imageError || !src) {
+    return (
+      <div className={`${className} flex items-center justify-center bg-gradient-soft border border-primary-100 rounded-lg`}>
+        <ImageIcon className="w-8 h-8 text-slate-300" />
+      </div>
+    )
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onError={handleError}
+      onLoad={handleLoad}
+      className={`${className} ${imageLoading ? 'animate-pulse bg-slate-100' : ''}`}
+    />
+  )
+}
+
+// Premium panel card with professional hospital styling
 function InsuranceCard({ item, type = 'panel' }) {
   if (type === 'panel') {
+    // Get logo from multiple possible field names
+    const logoUrl = item.logo || item.logoUrl || item.image || item.imageUrl
+    
     return (
       <motion.div
-        whileHover={{ translateY: -8 }}
-        className="card p-6 sm:p-8 text-center group"
+        whileHover={{ translateY: -8, boxShadow: '0 20px 50px -8px rgba(29, 78, 216, 0.2)' }}
+        className="card h-full overflow-hidden flex flex-col"
       >
-        {item.logo ? (
-          <img src={item.logo} alt={item.name} className="h-16 w-16 mx-auto mb-4 object-contain" />
-        ) : (
-          <div className="text-5xl sm:text-6xl mb-4 transform group-hover:scale-110 transition-transform">🛡️</div>
-        )}
-        <h3 className="font-bold text-primary-900 font-display text-lg sm:text-xl mb-2">{item.name}</h3>
-        <p className="text-slate-600 text-sm sm:text-base mb-4 font-medium">{item.description || item.category}</p>
-        {item.benefits && (
-          <div className="space-y-2">
-            {item.benefits.map((benefit, i) => (
-              <div key={i} className="flex items-center justify-center gap-2 text-sm text-slate-600">
-                <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
-                <span>{benefit}</span>
-              </div>
-            ))}
+        {/* Logo Container */}
+        <div className="h-32 sm:h-40 bg-gradient-to-br from-primary-50 to-cyan-50 border-b border-primary-100 flex items-center justify-center p-4">
+          <InsuranceImage
+            src={logoUrl}
+            alt={item.name}
+            className="h-24 w-24 sm:h-32 sm:w-32 object-contain"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="p-6 sm:p-8 flex-1 flex flex-col">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <h3 className="font-bold text-primary-900 font-display text-lg sm:text-xl flex-1">
+              {item.name}
+            </h3>
+            {item.active && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-medical-green/10 text-medical-green whitespace-nowrap flex-shrink-0">
+                <CheckCircle2 className="w-3 h-3" />
+                Active
+              </span>
+            )}
           </div>
-        )}
+
+          {/* Category Badge */}
+          <div className="mb-4">
+            <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent">
+              {item.category}
+            </span>
+          </div>
+
+          {/* Description */}
+          <p className="text-slate-600 text-sm leading-relaxed flex-1">
+            {item.description || 'Premium insurance partner providing comprehensive healthcare coverage'}
+          </p>
+
+          {/* Benefits if available */}
+          {item.benefits && item.benefits.length > 0 && (
+            <div className="mt-5 space-y-2 pt-5 border-t border-slate-100">
+              {item.benefits.slice(0, 2).map((benefit, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
+                  <CheckCircle2 className="w-4 h-4 text-medical-green flex-shrink-0" />
+                  <span>{benefit}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </motion.div>
     )
   }
 
   if (type === 'tpa') {
+    // Get logo from multiple possible field names
+    const logoUrl = item.logo || item.logoUrl || item.image || item.imageUrl
+    
     return (
       <motion.div
-        whileHover={{ translateY: -8 }}
-        className="card p-6 sm:p-8 group"
+        whileHover={{ translateY: -8, boxShadow: '0 20px 50px -8px rgba(29, 78, 216, 0.2)' }}
+        className="card h-full overflow-hidden flex flex-col"
       >
-        {item.logo ? (
-          <img src={item.logo} alt={item.name} className="h-24 w-24 mx-auto mb-4 object-contain" />
-        ) : (
-          <div className="text-6xl sm:text-7xl mb-4 text-center transform group-hover:scale-110 transition-transform">🏢</div>
-        )}
-        <h3 className="font-bold text-primary-900 font-display text-base sm:text-lg text-center mb-3">{item.name}</h3>
-        {item.description && (
-          <p className="text-sm text-slate-700 text-center">{item.description}</p>
-        )}
+        {/* Logo Container */}
+        <div className="h-40 sm:h-48 bg-gradient-to-br from-primary-50 to-cyan-50 border-b border-primary-100 flex items-center justify-center p-6">
+          <InsuranceImage
+            src={logoUrl}
+            alt={item.name}
+            className="h-28 w-28 sm:h-40 sm:w-40 object-contain"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="p-6 sm:p-8 flex-1 flex flex-col items-center text-center">
+          <h3 className="font-bold text-primary-900 font-display text-base sm:text-lg mb-3">
+            {item.name}
+          </h3>
+
+          {/* Badge if needed */}
+          <div className="mb-4">
+            <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent">
+              TPA Partner
+            </span>
+          </div>
+
+          {/* Description */}
+          {item.description && (
+            <p className="text-sm text-slate-600 leading-relaxed flex-1">
+              {item.description}
+            </p>
+          )}
+        </div>
       </motion.div>
     )
   }
 }
 
 export default function Insurance() {
-  const { data: partners, loading, error } = useInsurancePartners()
+  const {
+  data: partners = [],
+  loading,
+  error
+} = useInsurancePartners() || {};
 
-  // Add debug logging
+  // Debug logging
   console.debug('🏥 Insurance page render:', {
-    partnersCount: partners.length,
+    partnersCount: partners?.length || 0,
     loading,
     hasError: !!error,
     partners: partners.map(p => ({
       id: p.id,
       name: p.name,
       category: p.category,
-      active: p.active
+      active: p.active,
+      hasLogo: !!(p.logo || p.logoUrl || p.image || p.imageUrl)
     }))
   })
 
   // Separate partners by category with proper fallback handling
-  const insurancePanels = partners.filter(p => p.category === 'Insurance').sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
-  const governmentPanels = partners.filter(p => p.category === 'Government Panel').sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
-  const tpaPanels = partners.filter(p => p.category === 'TPA').sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+  const insurancePanels = partners
+    .filter(p => p.category === 'Insurance' && p.active !== false)
+    .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+
+  const governmentPanels = partners
+    .filter(p => p.category === 'Government Panel' && p.active !== false)
+    .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+
+  const tpaPanels = partners
+    .filter(p => p.category === 'TPA' && p.active !== false)
+    .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
 
   // Use default data if no partners found and not loading
   const showDefaults = insurancePanels.length === 0 && governmentPanels.length === 0 && !loading
@@ -168,7 +274,10 @@ export default function Insurance() {
               className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex gap-3"
             >
               <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-              <p className="text-yellow-700 text-sm">⚠️ Error loading insurance partners: {error.message || 'Unknown error'}. Showing default panels.</p>
+              <div>
+                <p className="text-yellow-700 text-sm font-semibold">Error loading insurance partners</p>
+                <p className="text-yellow-600 text-xs mt-1">{error.message || 'Unknown error. Showing default panels.'}</p>
+              </div>
             </motion.div>
           )}
 
@@ -192,7 +301,7 @@ export default function Insurance() {
           >
             {loading ? (
               Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="card p-6 animate-pulse h-40 bg-slate-100" />
+                <div key={i} className="card p-6 animate-pulse h-80 bg-slate-100" />
               ))
             ) : allPanels.length > 0 ? (
               allPanels.map((panel) => (
@@ -229,7 +338,7 @@ export default function Insurance() {
               <motion.div
                 key={i}
                 variants={itemVariants}
-                className="flex items-center gap-3 p-4 sm:p-5 bg-primary-50 rounded-lg sm:rounded-xl border border-primary-100 hover:border-primary-300 transition-colors"
+                className="flex items-center gap-3 p-4 sm:p-5 bg-primary-50 rounded-lg sm:rounded-xl border border-primary-100 hover:border-primary-300 transition-colors hover:shadow-md"
               >
                 <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0" />
                 <span className="text-sm sm:text-base font-semibold text-slate-700">{facility}</span>
@@ -295,7 +404,7 @@ export default function Insurance() {
               </a>
               <a
                 href="mailto:info@sunflagglobalhospital.com"
-                className="btn-secondary text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 border-2 border-white text-black hover:bg-white/10"
+                className="btn-secondary text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 border-2 border-white text-white hover:bg-white/10"
               >
                 Email Us
               </a>

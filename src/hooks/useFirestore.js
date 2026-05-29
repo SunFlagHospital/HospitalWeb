@@ -117,30 +117,20 @@ export const useAdminInsurancePartners = () => {
 // NOTE: We fetch ALL active partners first (without orderBy) to avoid filtering out docs with missing displayOrder
 // Then sort them in the component to handle missing displayOrder gracefully
 export const useInsurancePartners = () => {
-  const { data, loading, error } = useRealtimeCollection(insurancePartnersService, [where('active', '==', true)])
-  
-  // Sort on frontend - handle missing displayOrder gracefully
-  const sortedData = data.sort((a, b) => {
-    const orderA = a.displayOrder ?? Infinity
-    const orderB = b.displayOrder ?? Infinity
-    return orderA - orderB
-  })
-  
-  console.debug('🔍 useInsurancePartners:', {
-    totalPartners: sortedData.length,
+  const { data, loading, error } = useRealtimeCollection(
+    insurancePartnersService,
+    [where('active', '==', true)]
+  );
+
+  const sortedData = [...data].sort((a, b) => {
+    const orderA = a.displayOrder ?? Infinity;
+    const orderB = b.displayOrder ?? Infinity;
+    return orderA - orderB;
+  });
+
+  return {
+    data: sortedData,
     loading,
-    hasError: !!error,
-    error: error?.message || null,
-    categories: [...new Set(sortedData.map(p => p.category || 'MISSING'))],
-    partners: sortedData.map(p => ({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      active: p.active,
-      displayOrder: p.displayOrder,
-      hasLogo: !!p.logo
-    }))
-  })
-  
-  return { data: sortedData, loading, error }
+    error
+  };
 }
