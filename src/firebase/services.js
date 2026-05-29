@@ -79,6 +79,26 @@ export const videosService = createService('videos')
 // Insurance Partners collection
 export const insurancePartnersService = createService('insurancePartners')
 
+// Debug logging for insurance partners
+const _originalInsuranceSubscribe = insurancePartnersService.subscribe
+insurancePartnersService.subscribe = function(callback, constraints = []) {
+  console.debug('🏢 Setting up insurance partners listener with constraints:', constraints.length > 0 ? constraints : 'none')
+  const unsubscribe = _originalInsuranceSubscribe.call(this, (docs) => {
+    console.debug('✅ Insurance partners snapshot:', {
+      count: docs.length,
+      active: docs.filter(d => d.active).length,
+      categories: [...new Set(docs.map(d => d.category || 'MISSING'))],
+      missingFields: {
+        displayOrder: docs.filter(d => !d.displayOrder).length,
+        category: docs.filter(d => !d.category).length,
+        logo: docs.filter(d => !d.logo).length
+      }
+    })
+    callback(docs)
+  }, constraints)
+  return unsubscribe
+}
+
 // Small helper to set a single contact document with a fixed ID
 export const setContact = async (id, data) => {
   await setDoc(doc(db, 'contactInfo', id), { ...data, updatedAt: serverTimestamp(), createdAt: serverTimestamp() })

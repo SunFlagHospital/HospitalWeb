@@ -90,7 +90,7 @@ export const useContact = () => useRealtimeCollection(contactService)
 export const useGallery = () => useRealtimeCollection(galleryService, [orderBy('createdAt', 'desc')])
 
 // Admin real-time hooks (no filters - show all)
-// Note: displayOrder ordering removed to ensure all doctors load, even without displayOrder field
+// Note: displayOrder ordering removed to ensure all items load, even without displayOrder field
 export const useAdminDoctors = () => useRealtimeCollection(doctorsService, [])
 export const useAdminServices = () => useRealtimeCollection(servicesService)
 export const useAdminCareers = () => useRealtimeCollection(careersService)
@@ -100,7 +100,47 @@ export const useAdminBanners = () => useRealtimeCollection(bannersService)
 export const useAdminGallery = () => useRealtimeCollection(galleryService)
 export const useAdminApplications = () => useRealtimeCollection(applicationsService)
 export const useAdminVideos = () => useRealtimeCollection(videosService)
-export const useAdminInsurancePartners = () => useRealtimeCollection(insurancePartnersService, [orderBy('displayOrder', 'asc')])
+export const useAdminInsurancePartners = () => {
+  const { data, loading, error } = useRealtimeCollection(insurancePartnersService, [])
+  
+  // Sort on frontend to handle missing displayOrder
+  const sortedData = data.sort((a, b) => {
+    const orderA = a.displayOrder ?? Infinity
+    const orderB = b.displayOrder ?? Infinity
+    return orderA - orderB
+  })
+  
+  return { data: sortedData, loading, error }
+}
 
 // Frontend hooks for insurance partners
-export const useInsurancePartners = () => useRealtimeCollection(insurancePartnersService, [where('active', '==', true), orderBy('displayOrder', 'asc')])
+// NOTE: We fetch ALL active partners first (without orderBy) to avoid filtering out docs with missing displayOrder
+// Then sort them in the component to handle missing displayOrder gracefully
+export const useInsurancePartners = () => {
+  const { data, loading, error } = useRealtimeCollection(insurancePartnersService, [where('active', '==', true)])
+  
+  // Sort on frontend - handle missing displayOrder gracefully
+  const sortedData = data.sort((a, b) => {
+    const orderA = a.displayOrder ?? Infinity
+    const orderB = b.displayOrder ?? Infinity
+    return orderA - orderB
+  })
+  
+  console.debug('🔍 useInsurancePartners:', {
+    totalPartners: sortedData.length,
+    loading,
+    hasError: !!error,
+    error: error?.message || null,
+    categories: [...new Set(sortedData.map(p => p.category || 'MISSING'))],
+    partners: sortedData.map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      active: p.active,
+      displayOrder: p.displayOrder,
+      hasLogo: !!p.logo
+    }))
+  })
+  
+  return { data: sortedData, loading, error }
+}

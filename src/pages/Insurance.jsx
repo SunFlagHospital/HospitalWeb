@@ -3,7 +3,7 @@ import { Shield, CheckCircle2, AlertCircle } from 'lucide-react'
 import SEO from '@/seo/SEO'
 import PageBanner from '@/components/common/PageBanner'
 import SectionHeader from '@/components/ui/SectionHeader'
-import { useInsurancePartners } from '@/hooks/useFirestore'
+import { useInsurancePartners } from "@/hooks/useFirestore";
 
 const cashlessFacilities = [
   'Zero Down Payment',
@@ -95,14 +95,27 @@ function InsuranceCard({ item, type = 'panel' }) {
 export default function Insurance() {
   const { data: partners, loading, error } = useInsurancePartners()
 
-  // Separate partners by category
-  const insurancePanels = partners.filter(p => p.category === 'Insurance') || defaultInsurancePanels.filter(p => p.category === 'Insurance')
-  const governmentPanels = partners.filter(p => p.category === 'Government Panel') || defaultInsurancePanels.filter(p => p.category === 'Government Panel')
-  const tpaPanels = partners.filter(p => p.category === 'TPA')
-  const cashlessPanels = partners.filter(p => p.category === 'Cashless')
+  // Add debug logging
+  console.debug('🏥 Insurance page render:', {
+    partnersCount: partners.length,
+    loading,
+    hasError: !!error,
+    partners: partners.map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      active: p.active
+    }))
+  })
 
-  // Use default data if no partners found
-  const allPanels = insurancePanels.length > 0 || governmentPanels.length > 0 ? [...insurancePanels, ...governmentPanels] : defaultInsurancePanels
+  // Separate partners by category with proper fallback handling
+  const insurancePanels = partners.filter(p => p.category === 'Insurance').sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+  const governmentPanels = partners.filter(p => p.category === 'Government Panel').sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+  const tpaPanels = partners.filter(p => p.category === 'TPA').sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+
+  // Use default data if no partners found and not loading
+  const showDefaults = insurancePanels.length === 0 && governmentPanels.length === 0 && !loading
+  const allPanels = showDefaults ? defaultInsurancePanels : [...insurancePanels, ...governmentPanels]
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -155,7 +168,18 @@ export default function Insurance() {
               className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex gap-3"
             >
               <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-              <p className="text-yellow-700 text-sm">Note: Loading default insurance panels</p>
+              <p className="text-yellow-700 text-sm">⚠️ Error loading insurance partners: {error.message || 'Unknown error'}. Showing default panels.</p>
+            </motion.div>
+          )}
+
+          {showDefaults && !loading && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3"
+            >
+              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <p className="text-blue-700 text-sm">ℹ️ Showing default insurance panels. Add partners in the admin panel to customize.</p>
             </motion.div>
           )}
 
@@ -170,12 +194,16 @@ export default function Insurance() {
               Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="card p-6 animate-pulse h-40 bg-slate-100" />
               ))
-            ) : (
+            ) : allPanels.length > 0 ? (
               allPanels.map((panel) => (
                 <motion.div key={panel.id} variants={itemVariants}>
                   <InsuranceCard item={panel} type="panel" />
                 </motion.div>
               ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-slate-500">
+                <p className="text-lg font-semibold">No insurance panels available</p>
+              </div>
             )}
           </motion.div>
         </div>
@@ -212,37 +240,35 @@ export default function Insurance() {
       </section>
 
       {/* TPA Partners */}
-      {(tpaPanels.length > 0 || !loading) && (
-        <section className="py-12 sm:py-20 bg-gradient-soft">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-            <SectionHeader
-              badge="Partner Network"
-              title="TPA Partners"
-              subtitle="We work with leading TPA organizations for comprehensive coverage"
-            />
+      <section className="py-12 sm:py-20 bg-gradient-soft">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <SectionHeader
+            badge="Partner Network"
+            title="TPA Partners"
+            subtitle="We work with leading TPA organizations for comprehensive coverage"
+          />
 
-            {tpaPanels.length > 0 ? (
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12"
-              >
-                {tpaPanels.map((partner) => (
-                  <motion.div key={partner.id} variants={itemVariants}>
-                    <InsuranceCard item={partner} type="tpa" />
-                  </motion.div>
-                ))}
-              </motion.div>
-            ) : (
-              <div className="text-center py-12 text-slate-400 mt-8">
-                <p className="text-lg font-semibold">No TPA partners added yet</p>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
+          {tpaPanels.length > 0 ? (
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12"
+            >
+              {tpaPanels.map((partner) => (
+                <motion.div key={partner.id} variants={itemVariants}>
+                  <InsuranceCard item={partner} type="tpa" />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <div className="text-center py-12 text-slate-400 mt-8">
+              <p className="text-lg font-semibold">No TPA partners added yet</p>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Mediclaim Support */}
       <section className="py-12 sm:py-20 bg-white">
@@ -268,8 +294,8 @@ export default function Insurance() {
                 Call for Support
               </a>
               <a
-                href="mailto:insurance@sunflagglobalhospital.com"
-                className="btn-secondary text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 border-2 border-white text-white hover:bg-white/10"
+                href="mailto:info@sunflagglobalhospital.com"
+                className="btn-secondary text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 border-2 border-white text-black hover:bg-white/10"
               >
                 Email Us
               </a>
