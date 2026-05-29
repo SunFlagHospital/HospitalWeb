@@ -208,15 +208,15 @@ export default function Insurance() {
 
   // Separate partners by category with proper fallback handling
   const insurancePanels = partners
-    .filter(p => p.category === 'Insurance' && p.active !== false)
+    .filter(p => p.category === 'Insurance')
     .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
 
   const governmentPanels = partners
-    .filter(p => p.category === 'Government Panel' && p.active !== false)
+    .filter(p => p.category === 'Government Panel')
     .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
 
   const tpaPanels = partners
-    .filter(p => p.category === 'TPA' && p.active !== false)
+    .filter(p => p.category === 'TPA')
     .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
 
   // Use default data if no partners found and not loading

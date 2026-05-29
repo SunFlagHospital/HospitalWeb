@@ -113,24 +113,40 @@ export const useAdminInsurancePartners = () => {
   return { data: sortedData, loading, error }
 }
 
+
 // Frontend hooks for insurance partners
-// NOTE: We fetch ALL active partners first (without orderBy) to avoid filtering out docs with missing displayOrder
-// Then sort them in the component to handle missing displayOrder gracefully
+// NOTE: Fetch ALL partners (no active filter at DB level)
+// Filter by active status in component to handle all categories (Insurance, TPA, Government Panel)
 export const useInsurancePartners = () => {
-  const { data, loading, error } = useRealtimeCollection(
-    insurancePartnersService,
-    [where('active', '==', true)]
-  );
+  const { data, loading, error } = useRealtimeCollection(insurancePartnersService, [])
+  
+  // Filter and sort on frontend - only show active partners
+  const filteredData = data.filter(p => p.active === true)
+  
+  // Sort on frontend - handle missing displayOrder gracefully
+  const sortedData = filteredData.sort((a, b) => {
+    const orderA = a.displayOrder ?? Infinity
+    const orderB = b.displayOrder ?? Infinity
+    return orderA - orderB
+  })
 
-  const sortedData = [...data].sort((a, b) => {
-    const orderA = a.displayOrder ?? Infinity;
-    const orderB = b.displayOrder ?? Infinity;
-    return orderA - orderB;
-  });
-
-  return {
-    data: sortedData,
+  console.debug('🔍 useInsurancePartners:', {
+    totalPartners: data.length,
+    activePartners: sortedData.length,
     loading,
-    error
-  };
+    hasError: !!error,
+    error: error?.message || null,
+    allCategories: [...new Set(data.map(p => p.category || 'MISSING'))],
+    activeCategories: [...new Set(sortedData.map(p => p.category || 'MISSING'))],
+    partners: sortedData.map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      active: p.active,
+      displayOrder: p.displayOrder,
+      hasLogo: !!(p.logo || p.logoUrl || p.image || p.imageUrl)
+    }))
+  })
+  
+  return { data: sortedData, loading, error }
 }
