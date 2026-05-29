@@ -120,31 +120,31 @@ export const useAdminInsurancePartners = () => {
 export const useInsurancePartners = () => {
   const { data, loading, error } = useRealtimeCollection(insurancePartnersService, [])
   
-  // Filter and sort on frontend - only show active partners
-  const filteredData = data.filter(p => p.active === true)
+  // Filter and sort on frontend - only show active partners with safe fallback
+  const filteredData = (data || []).filter(p => p?.active === true)
   
   // Sort on frontend - handle missing displayOrder gracefully
   const sortedData = filteredData.sort((a, b) => {
-    const orderA = a.displayOrder ?? Infinity
-    const orderB = b.displayOrder ?? Infinity
+    const orderA = a?.displayOrder ?? Infinity
+    const orderB = b?.displayOrder ?? Infinity
     return orderA - orderB
   })
 
   console.debug('🔍 useInsurancePartners:', {
-    totalPartners: data.length,
+    totalPartners: data?.length || 0,
     activePartners: sortedData.length,
     loading,
     hasError: !!error,
     error: error?.message || null,
-    allCategories: [...new Set(data.map(p => p.category || 'MISSING'))],
-    activeCategories: [...new Set(sortedData.map(p => p.category || 'MISSING'))],
+    allCategories: [...new Set((data || []).map(p => p?.category?.trim?.()?.toLowerCase?.() || 'MISSING'))],
+    activeCategories: [...new Set(sortedData.map(p => p?.category?.trim?.()?.toLowerCase?.() || 'MISSING'))],
     partners: sortedData.map(p => ({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      active: p.active,
-      displayOrder: p.displayOrder,
-      hasLogo: !!(p.logo || p.logoUrl || p.image || p.imageUrl)
+      id: p?.id,
+      name: p?.name,
+      category: p?.category,
+      active: p?.active,
+      displayOrder: p?.displayOrder,
+      hasLogo: !!(p?.logo || p?.logoUrl || p?.image || p?.imageUrl)
     }))
   })
   

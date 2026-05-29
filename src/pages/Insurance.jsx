@@ -83,8 +83,8 @@ function InsuranceImage({ src, alt, className = "" }) {
 // Premium panel card with professional hospital styling
 function InsuranceCard({ item, type = 'panel' }) {
   if (type === 'panel') {
-    // Get logo from multiple possible field names
-    const logoUrl = item.logo || item.logoUrl || item.image || item.imageUrl
+    // Get logo from multiple possible field names with safe chaining
+    const logoUrl = item?.logo || item?.logoUrl || item?.image || item?.imageUrl
     
     return (
       <motion.div
@@ -95,7 +95,7 @@ function InsuranceCard({ item, type = 'panel' }) {
         <div className="h-32 sm:h-40 bg-gradient-to-br from-primary-50 to-cyan-50 border-b border-primary-100 flex items-center justify-center p-4">
           <InsuranceImage
             src={logoUrl}
-            alt={item.name}
+            alt={item?.name || 'Insurance Partner'}
             className="h-24 w-24 sm:h-32 sm:w-32 object-contain"
           />
         </div>
@@ -104,9 +104,9 @@ function InsuranceCard({ item, type = 'panel' }) {
         <div className="p-6 sm:p-8 flex-1 flex flex-col">
           <div className="flex items-start justify-between gap-3 mb-3">
             <h3 className="font-bold text-primary-900 font-display text-lg sm:text-xl flex-1">
-              {item.name}
+              {item?.name || 'Unnamed Partner'}
             </h3>
-            {item.active && (
+            {item?.active && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-medical-green/10 text-medical-green whitespace-nowrap flex-shrink-0">
                 <CheckCircle2 className="w-3 h-3" />
                 Active
@@ -117,19 +117,19 @@ function InsuranceCard({ item, type = 'panel' }) {
           {/* Category Badge */}
           <div className="mb-4">
             <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent">
-              {item.category}
+              {item?.category || 'Uncategorized'}
             </span>
           </div>
 
           {/* Description */}
           <p className="text-slate-600 text-sm leading-relaxed flex-1">
-            {item.description || 'Premium insurance partner providing comprehensive healthcare coverage'}
+            {item?.description || 'Premium insurance partner providing comprehensive healthcare coverage'}
           </p>
 
           {/* Benefits if available */}
-          {item.benefits && item.benefits.length > 0 && (
+          {(item?.benefits?.length || 0) > 0 && (
             <div className="mt-5 space-y-2 pt-5 border-t border-slate-100">
-              {item.benefits.slice(0, 2).map((benefit, i) => (
+              {(item?.benefits || []).slice(0, 2).map((benefit, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
                   <CheckCircle2 className="w-4 h-4 text-medical-green flex-shrink-0" />
                   <span>{benefit}</span>
@@ -143,8 +143,8 @@ function InsuranceCard({ item, type = 'panel' }) {
   }
 
   if (type === 'tpa') {
-    // Get logo from multiple possible field names
-    const logoUrl = item.logo || item.logoUrl || item.image || item.imageUrl
+    // Get logo from multiple possible field names with safe chaining
+    const logoUrl = item?.logo || item?.logoUrl || item?.image || item?.imageUrl
     
     return (
       <motion.div
@@ -155,7 +155,7 @@ function InsuranceCard({ item, type = 'panel' }) {
         <div className="h-40 sm:h-48 bg-gradient-to-br from-primary-50 to-cyan-50 border-b border-primary-100 flex items-center justify-center p-6">
           <InsuranceImage
             src={logoUrl}
-            alt={item.name}
+            alt={item?.name || 'TPA Partner'}
             className="h-28 w-28 sm:h-40 sm:w-40 object-contain"
           />
         </div>
@@ -163,7 +163,7 @@ function InsuranceCard({ item, type = 'panel' }) {
         {/* Content */}
         <div className="p-6 sm:p-8 flex-1 flex flex-col items-center text-center">
           <h3 className="font-bold text-primary-900 font-display text-base sm:text-lg mb-3">
-            {item.name}
+            {item?.name || 'Unnamed Partner'}
           </h3>
 
           {/* Badge if needed */}
@@ -174,9 +174,9 @@ function InsuranceCard({ item, type = 'panel' }) {
           </div>
 
           {/* Description */}
-          {item.description && (
+          {item?.description && (
             <p className="text-sm text-slate-600 leading-relaxed flex-1">
-              {item.description}
+              {item?.description}
             </p>
           )}
         </div>
@@ -187,41 +187,48 @@ function InsuranceCard({ item, type = 'panel' }) {
 
 export default function Insurance() {
   const {
-  data: partners = [],
-  loading,
-  error
-} = useInsurancePartners() || {};
+    data: partners = [],
+    loading,
+    error
+  } = useInsurancePartners() || {};
 
-  // Debug logging
+  // Safe category normalization function
+  const normalizeCategory = (category) => {
+    return category?.trim?.()?.toLowerCase?.() || '';
+  };
+
+  // Debug logging with enhanced diagnostics
   console.debug('🏥 Insurance page render:', {
     partnersCount: partners?.length || 0,
     loading,
     hasError: !!error,
-    partners: partners.map(p => ({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      active: p.active,
-      hasLogo: !!(p.logo || p.logoUrl || p.image || p.imageUrl)
+    partners: (partners || []).map(p => ({
+      id: p?.id,
+      name: p?.name,
+      category: p?.category,
+      normalizedCategory: normalizeCategory(p?.category),
+      active: p?.active,
+      displayOrder: p?.displayOrder,
+      hasLogo: !!(p?.logo || p?.logoUrl || p?.image || p?.imageUrl)
     }))
-  })
+  });
 
-  // Separate partners by category with proper fallback handling
-  const insurancePanels = partners
-    .filter(p => p.category === 'Insurance')
-    .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+  // Separate partners by category with safe normalization
+  const insurancePanels = (partners || [])
+    .filter(p => normalizeCategory(p?.category) === 'insurance')
+    .sort((a, b) => (a?.displayOrder ?? Infinity) - (b?.displayOrder ?? Infinity));
 
-  const governmentPanels = partners
-    .filter(p => p.category === 'Government Panel')
-    .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+  const governmentPanels = (partners || [])
+    .filter(p => normalizeCategory(p?.category) === 'government panel')
+    .sort((a, b) => (a?.displayOrder ?? Infinity) - (b?.displayOrder ?? Infinity));
 
-  const tpaPanels = partners
-    .filter(p => p.category === 'TPA')
-    .sort((a, b) => (a.displayOrder ?? Infinity) - (b.displayOrder ?? Infinity))
+  const tpaPanels = (partners || [])
+    .filter(p => normalizeCategory(p?.category) === 'tpa')
+    .sort((a, b) => (a?.displayOrder ?? Infinity) - (b?.displayOrder ?? Infinity));
 
-  // Use default data if no partners found and not loading
-  const showDefaults = insurancePanels.length === 0 && governmentPanels.length === 0 && !loading
-  const allPanels = showDefaults ? defaultInsurancePanels : [...insurancePanels, ...governmentPanels]
+  // Only show defaults when not loading and truly no data exists
+  const showDefaults = !loading && insurancePanels.length === 0 && governmentPanels.length === 0;
+  const allPanels = showDefaults ? defaultInsurancePanels : [...insurancePanels, ...governmentPanels];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -303,9 +310,9 @@ export default function Insurance() {
               Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="card p-6 animate-pulse h-80 bg-slate-100" />
               ))
-            ) : allPanels.length > 0 ? (
+            ) : (allPanels?.length || 0) > 0 ? (
               allPanels.map((panel) => (
-                <motion.div key={panel.id} variants={itemVariants}>
+                <motion.div key={panel?.id} variants={itemVariants}>
                   <InsuranceCard item={panel} type="panel" />
                 </motion.div>
               ))
@@ -357,7 +364,7 @@ export default function Insurance() {
             subtitle="We work with leading TPA organizations for comprehensive coverage"
           />
 
-          {tpaPanels.length > 0 ? (
+          {(tpaPanels?.length || 0) > 0 ? (
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -366,7 +373,7 @@ export default function Insurance() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12"
             >
               {tpaPanels.map((partner) => (
-                <motion.div key={partner.id} variants={itemVariants}>
+                <motion.div key={partner?.id} variants={itemVariants}>
                   <InsuranceCard item={partner} type="tpa" />
                 </motion.div>
               ))}

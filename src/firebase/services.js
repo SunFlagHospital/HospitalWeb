@@ -84,14 +84,22 @@ const _originalInsuranceSubscribe = insurancePartnersService.subscribe
 insurancePartnersService.subscribe = function(callback, constraints = []) {
   console.debug('🏢 Setting up insurance partners listener with constraints:', constraints.length > 0 ? constraints : 'none')
   const unsubscribe = _originalInsuranceSubscribe.call(this, (docs) => {
+    const normalizeCategory = (cat) => cat?.trim?.()?.toLowerCase?.() || '';
     console.debug('✅ Insurance partners snapshot:', {
-      count: docs.length,
-      active: docs.filter(d => d.active).length,
-      categories: [...new Set(docs.map(d => d.category || 'MISSING'))],
+      count: docs?.length || 0,
+      active: (docs || []).filter(d => d?.active).length,
+      categories: [...new Set((docs || []).map(d => d?.category || 'MISSING'))],
+      normalizedCategories: [...new Set((docs || []).map(d => normalizeCategory(d?.category)))],
+      categoryBreakdown: {
+        insurance: (docs || []).filter(d => normalizeCategory(d?.category) === 'insurance').length,
+        tpa: (docs || []).filter(d => normalizeCategory(d?.category) === 'tpa').length,
+        governmentPanel: (docs || []).filter(d => normalizeCategory(d?.category) === 'government panel').length,
+        cashless: (docs || []).filter(d => normalizeCategory(d?.category) === 'cashless').length,
+      },
       missingFields: {
-        displayOrder: docs.filter(d => !d.displayOrder).length,
-        category: docs.filter(d => !d.category).length,
-        logo: docs.filter(d => !d.logo).length
+        displayOrder: (docs || []).filter(d => !d?.displayOrder).length,
+        category: (docs || []).filter(d => !d?.category).length,
+        logo: (docs || []).filter(d => !d?.logo).length
       }
     })
     callback(docs)
