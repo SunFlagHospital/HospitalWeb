@@ -9,7 +9,7 @@ export const HOSPITAL_INFO = {
   address: 'Near Sheela Bypass ,Sonipat Road, Rohtak, Haryana - 124001',
   mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.0895509943152!2d76.60642367521186!3d28.895686872082624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d851a82659c73%3A0x9a3509f5c6a4eb1e!2sSunflag%20Global%20Hospital%20Rohtak!5e0!3m2!1sen!2sin!4v1779749742630!5m2!1sen!2sin',
   hours: {
-    opd: 'Mon–Sat: 8:00 AM – 8:00 PM',
+    opd: 'Mon–Sat: 10:00 AM – 10:00 PM',
     emergency: '24/7 Emergency Services',
     icu: '24/7 Intensive Care Unit',
   },

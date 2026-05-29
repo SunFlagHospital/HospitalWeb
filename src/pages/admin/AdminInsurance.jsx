@@ -5,7 +5,7 @@ import ImageKitUpload from '@/components/admin/ImageKitUpload'
 import { useAdminInsurancePartners } from '@/hooks/useFirestore'
 import { addInsurancePartner, updateInsurancePartner, deleteInsurancePartner } from '@/firebase/services'
 
-const categories = ['Insurance', 'TPA', 'Government Panel', 'Cashless']
+const categories = ['TPA', 'Government Panel', 'Private Insurance']
 
 const fields = [
   { name: 'name', label: 'Partner Name', required: true, placeholder: 'e.g. ECHS, Apollo Insurance' },
