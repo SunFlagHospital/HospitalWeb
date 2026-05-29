@@ -34,10 +34,18 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          // Core vendor chunks
+          'vendor-core': ['react', 'react-dom', 'react-router-dom'],
+          // Firebase chunked separately for lazy loading
           'firebase': ['firebase/app', 'firebase/firestore', 'firebase/auth', 'firebase/storage'],
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
+          // Motion & animations
           'motion': ['framer-motion'],
-          'ui': ['lucide-react', 'react-hot-toast'],
+          // UI libraries
+          'ui': ['lucide-react', 'react-hot-toast', 'react-icons'],
+          // Forms and hooks
+          'forms': ['react-hook-form'],
+          // External integrations
+          'integrations': ['imagekit', 'yet-another-react-lightbox', 'swiper'],
         },
       },
     },

@@ -31,8 +31,10 @@ export default function WhyChooseUs() {
               <div className="w-full relative rounded-3xl overflow-hidden shadow-premium h-[400px] sm:h-[450px] lg:h-[500px] flex-shrink-0">
                 <ResponsiveImage
                   src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80"
-                  alt="Advanced hospital technology"
+                  alt="Advanced hospital technology and equipment"
                   type="service"
+                  width={800}
+                  height={600}
                   className="w-full h-full"
                   objectFit="cover"
                 />

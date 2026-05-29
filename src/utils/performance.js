@@ -48,12 +48,11 @@ export const setupResourceHints = () => {
   preconnect([
     'https://firestore.googleapis.com',
     'https://www.googleapis.com',
+    'https://cdn.sunflagglobalhospital.com',
   ])
 
   // DNS prefetch for external services
   prefetchDNS([
-    'https://images.unsplash.com',
-    'https://wa.me',
     'https://ik.imagekit.io',
   ])
 }
@@ -87,27 +86,56 @@ export const throttle = (func, limit) => {
   }
 }
 
-// Cache API responses
+// Cache API responses with TTL
 export const cacheResponse = (key, data, ttl = 3600000) => {
   const cached = {
     data,
     timestamp: Date.now(),
     ttl
   }
-  sessionStorage.setItem(`cache_${key}`, JSON.stringify(cached))
+  try {
+    sessionStorage.setItem(`cache_${key}`, JSON.stringify(cached))
+  } catch (e) {
+    // Handle quota exceeded or private mode
+    console.warn('Cache storage unavailable:', e)
+  }
 }
 
 export const getCachedResponse = (key) => {
-  const cached = sessionStorage.getItem(`cache_${key}`)
-  if (!cached) return null
+  try {
+    const cached = sessionStorage.getItem(`cache_${key}`)
+    if (!cached) return null
 
-  const { data, timestamp, ttl } = JSON.parse(cached)
-  if (Date.now() - timestamp > ttl) {
-    sessionStorage.removeItem(`cache_${key}`)
+    const { data, timestamp, ttl } = JSON.parse(cached)
+    if (Date.now() - timestamp > ttl) {
+      sessionStorage.removeItem(`cache_${key}`)
+      return null
+    }
+
+    return data
+  } catch (e) {
+    console.warn('Cache retrieval error:', e)
     return null
   }
+}
 
-  return data
+// Lazy load Firebase modules on demand
+export const lazyLoadFirebase = async () => {
+  if (window.__firebaseLoaded) return
+  
+  return new Promise((resolve) => {
+    // Use requestIdleCallback to defer Firebase loading
+    const cb = () => {
+      window.__firebaseLoaded = true
+      resolve(true)
+    }
+    
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(cb, { timeout: 5000 })
+    } else {
+      setTimeout(cb, 1000)
+    }
+  })
 }
 
 // Bundle split suggestions
@@ -121,6 +149,11 @@ export const getBundleStats = async () => {
   }
 }
 
+// Optimize animations performance
+export const prefersReducedMotion = () => {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 export default {
   observeImages,
   prefetchDNS,
@@ -131,5 +164,7 @@ export default {
   throttle,
   cacheResponse,
   getCachedResponse,
+  lazyLoadFirebase,
   getBundleStats,
+  prefersReducedMotion,
 }

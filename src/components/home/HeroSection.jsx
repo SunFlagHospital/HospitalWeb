@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Phone, ArrowRight, Shield, Award, Users, Clock, ChevronDown } from 'lucide-react'
 import { HOSPITAL_INFO } from '@/data/staticData'
+import { useEffect } from 'react'
+import { preloadImage } from '@/utils/imageOptimization'
 
 const trustBadges = [
   { icon: Shield, label: 'NABH Accredited', sub: 'Certified Hospital' },
@@ -11,6 +13,10 @@ const trustBadges = [
 ]
 
 export default function HeroSection() {
+  useEffect(() => {
+    preloadImage('https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp', 'heroBanner')
+  }, [])
+
   // Animation variants for staggered effects
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -34,13 +40,31 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen pt-20 sm:pt-24 flex items-center overflow-x-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp')`
-        }}
-      />
+      {/* Background Image - Responsive with WebP */}
+      <picture className="absolute inset-0 w-full h-full">
+        <source 
+          media="(max-width: 640px)"
+          srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?w=800&h=1200&format=webp 1x"
+          type="image/webp"
+        />
+        <source 
+          media="(max-width: 1024px)"
+          srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?w=1280&h=720&format=webp 1x"
+          type="image/webp"
+        />
+        <source 
+          srcSet="https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp?w=1920&h=1080&format=webp 1x"
+          type="image/webp"
+        />
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://cdn.sunflagglobalhospital.com/uploads/banners/Bg.webp')`
+          }}
+          role="img"
+          aria-label="Hospital hero background"
+        />
+      </picture>
 
       {/* Enhanced Gradient Overlay - Stronger for better readability */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-900/95 via-primary-800/85 to-accent/30" />

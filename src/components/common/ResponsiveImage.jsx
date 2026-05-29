@@ -6,10 +6,11 @@ import { getOptimizedImageUrl, getDefaultImage, generateResponsiveImage } from '
  * Features:
  * - WebP format with fallback
  * - Lazy loading with intersection observer
- * - Responsive sizing
+ * - Responsive sizing with proper width/height
  * - Error handling with fallback image
  * - Async image decoding for performance
  * - object-fit and object-position support
+ * - Prevents layout shift with aspect-ratio
  */
 export default function ResponsiveImage({
   src,
@@ -77,6 +78,9 @@ export default function ResponsiveImage({
     }
   }
 
+  // Calculate aspect ratio for layout shift prevention
+  const aspectRatio = width && height ? `${width}/${height}` : 'auto'
+
   // Skip rendering if not visible and not priority
   if (!isVisible && !priority) {
     return (
@@ -86,7 +90,7 @@ export default function ResponsiveImage({
         style={{
           width: width || '100%',
           height: height || 'auto',
-          aspectRatio: width && height ? `${width}/${height}` : 'auto',
+          aspectRatio,
         }}
         aria-label={`Loading ${alt}`}
       />
@@ -102,7 +106,7 @@ export default function ResponsiveImage({
       style={{
         width: width || '100%',
         height: height || 'auto',
-        aspectRatio: width && height ? `${width}/${height}` : 'auto',
+        aspectRatio,
       }}
     >
       {/* Placeholder skeleton loader */}
@@ -131,6 +135,8 @@ export default function ResponsiveImage({
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}
+        width={width}
+        height={height}
       />
 
       {/* Error state */}

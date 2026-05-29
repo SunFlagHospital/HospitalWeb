@@ -166,11 +166,15 @@ export default function Gallery() {
                       className="relative group overflow-hidden rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 w-full h-full transition-all duration-300"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
+                      aria-label={`View gallery image: ${img?.title || `Image ${idx + 1}`}`}
                     >
                       <ResponsiveImage 
                         src={img?.image} 
-                        alt={img?.title || 'Gallery image'} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        alt={img?.title || `Gallery image ${idx + 1}`}
+                        type="gallery"
+                        width={300}
+                        height={250}
+                        className="w-full h-full group-hover:scale-110 transition-transform duration-300"
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
@@ -215,31 +219,41 @@ export default function Gallery() {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setSelectedIndex(-1)}
                         className="absolute -top-10 sm:top-4 right-0 sm:right-4 text-white hover:text-primary-300 hover:bg-white/10 transition-all duration-200 z-20 p-2 rounded-lg"
-                        aria-label="Close gallery (Esc)"
+                        aria-label="Close gallery viewer (Press Escape)"
                       >
-                        <X className="w-6 h-6 sm:w-7 sm:h-7" />
+                        <X className="w-6 h-6 sm:w-7 sm:h-7" aria-hidden="true" />
                       </motion.button>
 
                       {/* Image Container with Touch Support */}
                       <div 
-                        className="relative w-full flex-1 flex items-center justify-center bg-black/50 rounded-lg overflow-hidden"
+                        className="relative w-full flex-1 flex items-center justify-center bg-black/50 rounded-lg overflow-hidden min-h-[300px] sm:min-h-[400px]"
                         onTouchStart={handleTouchStart}
                         onTouchEnd={handleTouchEnd}
                       >
-                        <motion.div
-                          key={`image-${selectedIndex}`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="w-full h-full flex items-center justify-center"
-                        >
-                          <ResponsiveImage
-                            src={images[selectedIndex]?.image}
-                            alt={images[selectedIndex]?.title || 'Gallery image'}
-                            className="w-full h-full object-contain"
-                          />
-                        </motion.div>
+                        {images[selectedIndex] ? (
+                          <motion.div
+                            key={`image-${selectedIndex}`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="w-full h-full flex items-center justify-center"
+                          >
+                            <ResponsiveImage
+                              src={images[selectedIndex]?.image}
+                              alt={images[selectedIndex]?.title || 'Gallery image'}
+                              width={1200}
+                              height={800}
+                              className="max-w-full max-h-full"
+                              objectFit="contain"
+                              priority={true}
+                            />
+                          </motion.div>
+                        ) : (
+                          <div className="text-white text-center">
+                            <p>Image unavailable</p>
+                          </div>
+                        )}
 
                         {/* Previous Button */}
                         <motion.button
@@ -249,7 +263,7 @@ export default function Gallery() {
                           className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 text-white hover:bg-white/20 rounded-lg transition-all duration-200 z-10"
                           aria-label="Previous image (←)"
                         >
-                          <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+                          <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
                         </motion.button>
 
                         {/* Next Button */}
@@ -260,7 +274,7 @@ export default function Gallery() {
                           className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 text-white hover:bg-white/20 rounded-lg transition-all duration-200 z-10"
                           aria-label="Next image (→)"
                         >
-                          <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+                          <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" aria-hidden="true" />
                         </motion.button>
                       </div>
 
@@ -299,6 +313,8 @@ export default function Gallery() {
                           transition={{ delay: 0.15, duration: 0.3 }}
                           ref={thumbnailScrollRef}
                           className="mt-3 sm:mt-4 flex gap-2 overflow-x-auto pb-2 px-2 scroll-smooth"
+                          role="region"
+                          aria-label="Image thumbnails"
                         >
                           {(images || []).map((img, idx) => (
                             <motion.button
@@ -307,17 +323,21 @@ export default function Gallery() {
                               onClick={() => handleThumbnailClick(idx)}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className={`flex-shrink-0 h-16 sm:h-20 rounded-lg overflow-hidden transition-all duration-200 ${
+                              className={`flex-shrink-0 h-16 sm:h-20 w-16 sm:w-20 rounded-lg overflow-hidden transition-all duration-200 ${
                                 idx === selectedIndex 
                                   ? 'ring-2 ring-primary-400 opacity-100' 
                                   : 'opacity-60 hover:opacity-80'
                               }`}
-                              aria-label={`View image ${idx + 1}`}
+                              aria-label={`Thumbnail: ${img?.title || `Image ${idx + 1}`}${idx === selectedIndex ? ' (current)' : ''}`}
                             >
                               <ResponsiveImage
                                 src={img?.image}
-                                alt={img?.title || `Thumbnail ${idx + 1}`}
-                                className="w-full h-full object-cover"
+                                alt={`Thumbnail ${idx + 1}`}
+                                type="gallery"
+                                width={80}
+                                height={80}
+                                className="w-full h-full"
+                                objectFit="cover"
                               />
                             </motion.button>
                           ))}

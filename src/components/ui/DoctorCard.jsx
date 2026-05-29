@@ -30,8 +30,10 @@ function DoctorCard({ doctor, index = 0 }) {
 
         <ResponsiveImage
           src={doctor.image}
-          alt={doctor.name}
+          alt={`Dr. ${doctor.name} - ${doctor.speciality}`}
           type="doctor"
+          width={500}
+          height={600}
           className="w-full h-full"
           objectFit="cover"
           onLoad={handleImageLoad}
@@ -67,7 +69,7 @@ function DoctorCard({ doctor, index = 0 }) {
           <h3 className="font-bold text-primary-900 font-display text-base sm:text-lg 
             group-hover:text-primary-600 transition-colors duration-200 
             leading-snug line-clamp-2">
-            {doctor.name}
+            Dr. {doctor.name}
           </h3>
           <p className="text-accent font-semibold text-sm sm:text-base mt-1 
             group-hover:text-accent-dark transition-colors duration-200">
@@ -78,35 +80,35 @@ function DoctorCard({ doctor, index = 0 }) {
         {/* Experience & Professional Details */}
         <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5 flex-grow">
           {/* Department */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
-            <Stethoscope className="w-4 h-4 text-primary-500 flex-shrink-0" />
+          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Department: ${doctor.department}`}>
+            <Stethoscope className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="line-clamp-1">{doctor.department}</span>
           </div>
 
           {/* Experience */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
-            <Calendar className="w-4 h-4 text-primary-500 flex-shrink-0" />
+          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Experience: ${doctor.experience || 'Not specified'}`}>
+            <Calendar className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="line-clamp-1">{doctor.experience || 'Experience info not available'}</span>
           </div>
 
           {/* Qualification */}
-          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
-            <Award className="w-4 h-4 text-primary-500 flex-shrink-0" />
+          <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Qualification: ${doctor.qualification}`}>
+            <Award className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
             <span className="line-clamp-1">{doctor.qualification}</span>
           </div>
 
           {/* Previous Hospital/Experience - new field */}
           {doctor.previousHospital && (
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
-              <Briefcase className="w-4 h-4 text-primary-500 flex-shrink-0" />
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Previously: ${doctor.previousHospital}`}>
+              <Briefcase className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
               <span className="line-clamp-1">Ex. {doctor.previousHospital}</span>
             </div>
           )}
 
           {/* Expertise - new field */}
           {doctor.expertise && (
-            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors">
-              <BookOpen className="w-4 h-4 text-primary-500 flex-shrink-0" />
+            <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-600 hover:text-slate-700 transition-colors" aria-label={`Expertise: ${doctor.expertise}`}>
+              <BookOpen className="w-4 h-4 text-primary-500 flex-shrink-0" aria-hidden="true" />
               <span className="line-clamp-1">{doctor.expertise}</span>
             </div>
           )}
@@ -128,9 +130,10 @@ function DoctorCard({ doctor, index = 0 }) {
             rounded-xl text-xs sm:text-sm font-semibold 
             transition-all duration-200 group/btn
             mt-auto shadow-sm hover:shadow-md"
+          aria-label={`Book appointment with Dr. ${doctor.name}`}
         >
           Book Appointment
-          <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+          <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true" />
         </Link>
       </div>
     </motion.div>
